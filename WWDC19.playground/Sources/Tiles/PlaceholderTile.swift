@@ -20,8 +20,7 @@ public class PlaceholderTile: SKNode {
     
     public func updateSize() {
         square.texture = Texture.placeholderTile
-        square.size = BoardTile.size
-        square.color = .red
+        square.size = Size.boardTile
     }
     
     public func update(_ currentTime: TimeInterval) {

@@ -6,7 +6,6 @@ public class Scene: SKScene {
     let car: Car
     
     override public init() {
-        Texture.regenerateTextures()
         board = Board()
         car = Car()
         super.init(size: .zero)
@@ -41,6 +40,7 @@ public class Scene: SKScene {
     }
     
     public override func didChangeSize(_ oldSize: CGSize) {
+        Size.updateSizing(sceneSize: size)
         board.updateSize()
         car.updateSize()
     }

@@ -2,8 +2,6 @@ import SpriteKit
 
 public class BoardTile: SKNode {
     
-    static let size = CGSize(width: 50, height: 50)
-    
     let tile: Tile?
     let placeholderTile: PlaceholderTile
     

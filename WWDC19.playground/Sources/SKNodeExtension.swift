@@ -6,6 +6,10 @@ extension SKNode {
 
 extension CGSize {
     
+    static func /(left: CGSize, right: CGFloat) -> CGSize {
+        return CGSize(width: left.width / right, height: left.height / right)
+    }
+    
     var middle: CGPoint {
         return CGPoint(x: 0.5 * width, y: 0.5 * height)
     }
