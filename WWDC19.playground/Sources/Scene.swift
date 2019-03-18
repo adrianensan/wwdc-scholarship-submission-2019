@@ -2,7 +2,7 @@ import SpriteKit
 
 public class Scene: SKScene {
     
-    private let background: SKSpriteNode
+    private let background: Background
     private let board: Board
     private let tileSelector: TileSelector
     private let car: Car
@@ -16,7 +16,7 @@ public class Scene: SKScene {
     private var lastUpdateTime: TimeInterval
     
     override public init() {
-        background = SKSpriteNode()
+        background = Background()
         board = Board()
         tileSelector = TileSelector()
         car = Car()
@@ -26,8 +26,9 @@ public class Scene: SKScene {
         
         scaleMode = .resizeFill
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        backgroundColor = .black
+        setScale(0.5)
         
-        background.texture = SKTexture(imageNamed: "background.jpg")
         background.zPosition = ZPosition.background
         addChild(background)
         
@@ -66,8 +67,7 @@ public class Scene: SKScene {
         
         Size.updateSizing(sceneSize: size)
         
-        background.size.height = size.height
-        background.size.width = 1.6 * background.size.height
+        background.updateSize()
         board.updateSize()
         tileSelector.updateSize()
         car.updateSize()

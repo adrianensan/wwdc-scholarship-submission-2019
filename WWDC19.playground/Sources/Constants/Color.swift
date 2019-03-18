@@ -2,6 +2,7 @@ import SpriteKit
 
 public struct Color {
     
+    static let backgroundWoodBlock = SKColor(red: 0.40, green: 0.19, blue: 0.03, alpha: 1)
     static let grass = SKColor(red: 0.22, green: 0.47, blue: 0.18, alpha: 1)
     static let grassAccent = SKColor(red: 0.2, green: 0.42, blue: 0.14, alpha: 1)
     

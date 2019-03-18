@@ -2,11 +2,12 @@ import SpriteKit
 
 public struct Texture {
     
-    static var placeholderTile: SKTexture!
+    static var backgroundWoodBlock: SKTexture!
     static var car: SKTexture!
     
     // Tiles
     static var tileShadow: SKTexture!
+    static var placeholderTile: SKTexture!
     static var grassTile: SKTexture!
     static var straightRoad: SKTexture!
     static var straightWideRoad: SKTexture!
@@ -15,10 +16,11 @@ public struct Texture {
     static var grassAccent: SKTexture!
     
     static func regenerateTextures() {
-        placeholderTile = TilePlaceholderTextureGenerator.generate()
+        backgroundWoodBlock = BackgroundWoodBlockGenerator.generate()
         car = CarTextureGenerator.generate()
         
         tileShadow = TileShadowTextureGenerator.generate()
+        placeholderTile = TilePlaceholderTextureGenerator.generate()
         grassTile = GrassTileTextureGenerator.generate()
         straightRoad = StraightRoadTextureGenerator.generate()
         straightWideRoad = StraightWideRoadTextureGenerator.generate()
