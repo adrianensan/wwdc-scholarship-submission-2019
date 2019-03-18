@@ -7,7 +7,7 @@ public class GrassTile: Tile {
     public override init() {
         grassAccents = {
             var grassAccents = [(SKSpriteNode, CGPoint)]()
-            let numOfAccents = Int.random(in: 1..<15)
+            let numOfAccents = Int.random(in: 5..<30)
             for _ in 0..<numOfAccents {
                 let position = CGPoint(x: CGFloat.random(in: -0.425..<0.425),
                                        y: CGFloat.random(in: -0.425..<0.425))
