@@ -2,7 +2,7 @@ import SpriteKit
 
 public class Car: SKNode {
     
-    let shape: SKSpriteNode
+    private let shape: SKSpriteNode
     
     override init() {
         shape = SKSpriteNode()

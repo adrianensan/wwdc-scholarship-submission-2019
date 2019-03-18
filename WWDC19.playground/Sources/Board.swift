@@ -4,7 +4,17 @@ public class Board: SKNode {
     
     static let tileCount: Int = 5
     
-    let tiles: [[BoardTile]]
+    public var showPlaceholders: Bool {
+        didSet {
+            for i in 0..<Board.tileCount {
+                for j in 0..<Board.tileCount {
+                    tiles[i][j].showPlaceHolder = showPlaceholders
+                }
+            }
+        }
+    }
+    
+    private let tiles: [[BoardTile]]
     
     public override init() {
         tiles = {
@@ -17,6 +27,7 @@ public class Board: SKNode {
             }
             return tiles
         }()
+        showPlaceholders = false
         super.init()
         
         for row in tiles {
@@ -40,13 +51,37 @@ public class Board: SKNode {
         }
     }
     
-    public func update(_ currentTime: TimeInterval) {
+    public func update(_ delta: CGFloat) {
         for i in 0..<Board.tileCount {
             for j in 0..<Board.tileCount {
-                tiles[i][j].update(currentTime)
+                tiles[i][j].update(delta)
             }
         }
     }
-    
 }
 
+extension Board: NewTileDelegate {
+    public func tileMoved(to point: CGPoint) {
+        let tile = getTileAt(point: point)
+        if tile == nil || !tile!.highlighted {
+            for i in 0..<Board.tileCount {
+                for j in 0..<Board.tileCount {
+                    tiles[i][j].highlighted = false
+                }
+            }
+        }
+        
+        tile?.highlighted = true
+    }
+    
+    public func tileDropped(to point: CGPoint, type: TileType) {
+        getTileAt(point: point)?.setType(type: type)
+    }
+    
+    private func getTileAt(point: CGPoint) -> BoardTile? {
+        for node in nodes(at: point) {
+            if let node = node as? BoardTile { return node }
+        }
+        return nil
+    }
+}

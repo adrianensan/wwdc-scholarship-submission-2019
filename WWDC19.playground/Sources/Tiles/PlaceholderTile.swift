@@ -2,9 +2,9 @@ import SpriteKit
 
 public class PlaceholderTile: SKNode {
     
-    let square: SKSpriteNode
+    private let square: SKSpriteNode
     
-    var flashingDirection: CGFloat
+    private var flashingDirection: CGFloat
     
     public override init() {
         square = SKSpriteNode()
@@ -23,7 +23,7 @@ public class PlaceholderTile: SKNode {
         square.size = Size.boardTile
     }
     
-    public func update(_ currentTime: TimeInterval) {
+    public func update(_ delta: CGFloat) {
         //alpha += flashingDirection
         //if alpha >= 1 || alpha <= 0.8 {
         //    flashingDirection *= -1

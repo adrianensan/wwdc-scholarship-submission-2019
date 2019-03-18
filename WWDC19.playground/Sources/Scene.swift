@@ -2,21 +2,42 @@ import SpriteKit
 
 public class Scene: SKScene {
     
-    let board: Board
-    let car: Car
+    private let background: SKSpriteNode
+    private let board: Board
+    private let tileSelector: TileSelector
+    private let car: Car
+    
+    private var editingBoard: Bool {
+        didSet {
+            board.showPlaceholders = editingBoard
+            tileSelector.showing = editingBoard
+        }
+    }
+    private var lastUpdateTime: TimeInterval
     
     override public init() {
+        background = SKSpriteNode()
         board = Board()
+        tileSelector = TileSelector()
         car = Car()
+        editingBoard = false
+        lastUpdateTime = Date().timeIntervalSince1970
         super.init(size: .zero)
         
         scaleMode = .resizeFill
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        backgroundColor = .brown
+        
+        background.texture = SKTexture(imageNamed: "background.jpg")
+        background.zPosition = ZPosition.background
+        addChild(background)
+        
+        addChild(board)
+        
+        tileSelector.delegate = board
+        addChild(tileSelector)
         
         car.updateSize()
-        board.updateSize()
-        addChild(board)
+        
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -25,6 +46,7 @@ public class Scene: SKScene {
     
     override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { touchDown(atPoint: t.location(in: self)) }
+        editingBoard = !editingBoard
     }
     
     override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -40,24 +62,33 @@ public class Scene: SKScene {
     }
     
     public override func didChangeSize(_ oldSize: CGSize) {
+        guard size != .zero && size != oldSize else { return }
+        
         Size.updateSizing(sceneSize: size)
+        
+        background.size.height = size.height
+        background.size.width = 1.6 * background.size.height
         board.updateSize()
+        tileSelector.updateSize()
         car.updateSize()
     }
     
     override public func update(_ currentTime: TimeInterval) {
-        board.update(currentTime)
+        let delta: CGFloat = CGFloat(currentTime - lastUpdateTime)
+        lastUpdateTime = currentTime
+        guard abs(delta) < 1 else { return }
+        board.update(delta)
     }
     
-    func touchDown(atPoint pos : CGPoint) {
+    func touchDown(atPoint pos: CGPoint) {
         
     }
     
-    func touchMoved(toPoint pos : CGPoint) {
+    func touchMoved(toPoint pos: CGPoint) {
         
     }
     
-    func touchUp(atPoint pos : CGPoint) {
+    func touchUp(atPoint pos: CGPoint) {
         
     }
 }
