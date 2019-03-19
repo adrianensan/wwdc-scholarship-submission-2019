@@ -6,6 +6,7 @@ public enum TileType: CaseIterable {
     case straightRoad
     case straightWideRoad
     case narrowToWideRoad
+    case curvedRoad
     
     public var tile: Tile {
         get {
@@ -14,6 +15,7 @@ public enum TileType: CaseIterable {
             case .straightRoad: return StraightRoadTile()
             case .straightWideRoad: return StraightWideRoadTile()
             case .narrowToWideRoad: return NarrowToWideRoadTile()
+            case .curvedRoad: return CurvedRoadTile()
             }
         }
     }

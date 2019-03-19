@@ -65,7 +65,8 @@ public class TileSelector: SKNode {
         for i in 0..<tiles.count {
             let spacing = 1.25 * Size.boardTile.height
             tiles[i].position[keyPath: point1] = background.position[keyPath: point1]
-            tiles[i].position[keyPath: point2] = 0.5 * (CGFloat(tiles.count) - 1) * spacing - CGFloat(i) * spacing
+            tiles[i].position[keyPath: point2] = (Size.sceneSize.width > Size.sceneSize.height ? 1 : -1) *
+                (0.5 * (CGFloat(tiles.count) - 1) * spacing - CGFloat(i) * spacing)
         }
     }
 }
