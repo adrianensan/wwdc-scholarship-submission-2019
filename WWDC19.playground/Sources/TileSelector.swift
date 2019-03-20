@@ -3,7 +3,7 @@ import SpriteKit
 public class TileSelector: SKNode {
     
     let background: SKSpriteNode
-    let tiles: [NewTile]
+    var tiles: [Tile]
     
     var delegate: NewTileDelegate?
     var showing: Bool {
@@ -15,9 +15,9 @@ public class TileSelector: SKNode {
     public override init() {
         background = SKSpriteNode()
         tiles = {
-            var tiles = [NewTile]()
+            var tiles = [Tile]()
             for tileType in TileType.allCases {
-                tiles.append(NewTile(type: tileType))
+                tiles.append(tileType.tile)
             }
             return tiles
         }()
@@ -30,6 +30,7 @@ public class TileSelector: SKNode {
         
         for tile in tiles {
             tile.delegate = self
+            tile.movable = true
             tile.zPosition = ZPosition.overlayTile
             addChild(tile)
         }
@@ -76,8 +77,18 @@ extension TileSelector: NewTileDelegate {
         delegate?.tileMoved(to: point)
     }
     
-    public func tileDropped(to point: CGPoint, type: TileType) {
-        delegate?.tileDropped(to: point, type: type)
+    public func tileDropped(to point: CGPoint, tile: Tile) -> Bool {
+        let successfullyDropped = delegate?.tileDropped(to: point, tile: tile) ?? false
+        if successfullyDropped {
+            let index = TileType.allCases.firstIndex(of: tile.type)!
+            tiles[index] = tile.type.tile
+            tiles[index].delegate = self
+            tiles[index].movable = true
+            tiles[index].zPosition = ZPosition.overlayTile
+            tiles[index].updateSize()
+            addChild(tiles[index])
+        }
         updatePositioning()
+        return successfullyDropped
     }
 }

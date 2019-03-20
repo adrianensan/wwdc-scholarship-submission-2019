@@ -2,7 +2,8 @@ import SpriteKit
 
 public struct NarrowToWideRoadTextureGenerator {
     static func generate() -> SKTexture! {
-        let roadSize = CGSize(width: Size.boardTile.width, height: 4 * Size.roadLaneWidth + 3 * Size.roadDividerWidth)
+        let roadSize = CGSize(width: Size.boardTile.width,
+                              height: 4 * Size.roadLaneWidth + 3 * Size.roadDividerWidth)
         let bigHalfHeight: CGFloat = 2 * Size.roadLaneWidth + 1.5 * Size.roadDividerWidth
         let smallHalfHeight: CGFloat = Size.roadLaneWidth + 0.5 * Size.roadDividerWidth
         

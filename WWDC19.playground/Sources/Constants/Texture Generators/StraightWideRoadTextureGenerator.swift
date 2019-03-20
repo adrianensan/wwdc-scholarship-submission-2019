@@ -2,7 +2,8 @@ import SpriteKit
 
 public struct StraightWideRoadTextureGenerator {
     static func generate() -> SKTexture! {
-        let roadSize = CGSize(width: Size.boardTile.width, height: 4 * Size.roadLaneWidth + 3 * Size.roadDividerWidth)
+        let roadSize = CGSize(width: Size.boardTile.width,
+                              height: 4 * Size.roadLaneWidth + 3 * Size.roadDividerWidth)
         
         let node = SKNode()
         

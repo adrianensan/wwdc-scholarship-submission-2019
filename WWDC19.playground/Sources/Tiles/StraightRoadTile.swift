@@ -2,6 +2,8 @@ import SpriteKit
 
 public class StraightRoadTile: GrassTile {
     
+    override var type: TileType { return TileType.straightRoad }
+    
     let road: SKSpriteNode
     
     public override init() {

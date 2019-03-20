@@ -2,6 +2,8 @@ import SpriteKit
 
 public class NarrowToWideRoadTile: GrassTile {
     
+    override var type: TileType { return TileType.narrowToWideRoad }
+    
     let road: SKSpriteNode
     
     public override init() {

@@ -2,6 +2,8 @@ import SpriteKit
 
 public class GrassTile: Tile {
     
+    override var type: TileType { return TileType.grass }
+    
     let grassAccents: [(node: SKSpriteNode, position: CGPoint)]
     
     public override init() {

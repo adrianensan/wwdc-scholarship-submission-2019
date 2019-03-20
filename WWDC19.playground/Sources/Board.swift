@@ -4,11 +4,11 @@ public class Board: SKNode {
     
     static let tileCount: Int = 5
     
-    public var showPlaceholders: Bool {
+    public var editable: Bool {
         didSet {
             for i in 0..<Board.tileCount {
                 for j in 0..<Board.tileCount {
-                    tiles[i][j].showPlaceHolder = showPlaceholders
+                    tiles[i][j].editable = editable
                 }
             }
         }
@@ -27,11 +27,12 @@ public class Board: SKNode {
             }
             return tiles
         }()
-        showPlaceholders = false
+        editable = false
         super.init()
         
         for row in tiles {
             for tile in row {
+                tile.delegate = self
                 addChild(tile)
             }
         }
@@ -74,8 +75,10 @@ extension Board: NewTileDelegate {
         tile?.highlighted = true
     }
     
-    public func tileDropped(to point: CGPoint, type: TileType) {
-        getTileAt(point: point)?.setType(type: type)
+    public func tileDropped(to point: CGPoint, tile: Tile) -> Bool {
+        guard let boardTile = getTileAt(point: point) else { return false }
+        boardTile.tile = tile
+        return true
     }
     
     private func getTileAt(point: CGPoint) -> BoardTile? {

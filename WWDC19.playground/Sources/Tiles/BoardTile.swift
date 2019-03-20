@@ -2,11 +2,27 @@ import SpriteKit
 
 public class BoardTile: SKNode {
     
-    var tile: Tile?
+    var tile: Tile? {
+        didSet {
+            highlighted = false
+            
+            guard let tile = tile else { return }
+            tile.zPosition = ZPosition.tilePlaceholder
+            tile.delegate = self
+            tile.movable = editable
+            tile.removeFromParent()
+            parent?.addChild(tile)
+            updateSize()
+        }
+    }
     private let placeholderTile: PlaceholderTile
     private let highlightOverlay: SKSpriteNode
     
-    var showPlaceHolder: Bool
+    var delegate: NewTileDelegate?
+    
+    var editable: Bool {
+        didSet { tile?.movable = editable }
+    }
     
     var highlighted: Bool {
         get { return !highlightOverlay.isHidden }
@@ -17,7 +33,7 @@ public class BoardTile: SKNode {
         tile = nil
         placeholderTile = PlaceholderTile()
         highlightOverlay = SKSpriteNode()
-        showPlaceHolder = false
+        editable = false
         super.init()
         
         placeholderTile.alpha = 0
@@ -28,11 +44,6 @@ public class BoardTile: SKNode {
         highlightOverlay.isHidden = true
         highlightOverlay.zPosition = ZPosition.tileHighlight
         addChild(highlightOverlay)
-        
-        if let tile = tile {
-            tile.zPosition = ZPosition.tile
-            addChild(tile)
-        }
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -43,31 +54,28 @@ public class BoardTile: SKNode {
         placeholderTile.updateSize()
         highlightOverlay.size = Size.boardTile
         tile?.updateSize()
+        tile?.position = position
     }
     
     public func update(_ delta: CGFloat) {
         placeholderTile.update(delta)
         tile?.update(delta)
-        if showPlaceHolder && placeholderTile.alpha < 1 {
+        if editable && placeholderTile.alpha < 1 {
             placeholderTile.alpha += delta * 10
         }
-        else if !showPlaceHolder && placeholderTile.alpha > 0 {
+        else if !editable && placeholderTile.alpha > 0 {
             placeholderTile.alpha -= delta * 10
         }
     }
+}
+
+extension BoardTile: NewTileDelegate {
+    public func tileMoved(to point: CGPoint) {
+        tile = nil
+        delegate?.tileMoved(to: point)
+    }
     
-    public func setType(type: TileType?) {
-        if let tile = tile {
-            tile.removeFromParent()
-            self.tile = nil
-        }
-        
-        if let type = type {
-            tile = type.tile
-            addChild(tile!)
-            updateSize()
-        }
-        
-        highlighted = false
+    public func tileDropped(to point: CGPoint, tile: Tile) -> Bool {
+        return delegate?.tileDropped(to: point, tile: tile) ?? true
     }
 }

@@ -9,7 +9,7 @@ public class Scene: SKScene {
     
     private var editingBoard: Bool {
         didSet {
-            board.showPlaceholders = editingBoard
+            board.editable = editingBoard
             tileSelector.showing = editingBoard
         }
     }

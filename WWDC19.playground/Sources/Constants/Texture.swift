@@ -13,6 +13,7 @@ public struct Texture {
     static var straightWideRoad: SKTexture!
     static var narrowToWideRoad: SKTexture!
     static var curvedRoad: SKTexture!
+    static var curvedWideRoad: SKTexture!
     
     static var grassAccent: SKTexture!
     
@@ -27,6 +28,7 @@ public struct Texture {
         straightWideRoad = StraightWideRoadTextureGenerator.generate()
         narrowToWideRoad = NarrowToWideRoadTextureGenerator.generate()
         curvedRoad = CurvedRoadTextureGenerator.generate()
+        curvedWideRoad = CurvedWideRoadTextureGenerator.generate()
         
         grassAccent = GrassAccentTextureGenerator.generate()
     }

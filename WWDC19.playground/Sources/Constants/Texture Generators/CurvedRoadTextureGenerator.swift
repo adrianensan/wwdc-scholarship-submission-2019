@@ -2,7 +2,8 @@ import SpriteKit
 
 public struct CurvedRoadTextureGenerator {
     static func generate() -> SKTexture! {
-        let roadSize = CGSize(width: Size.boardTile.width, height: 2 * Size.roadLaneWidth + Size.roadDividerWidth)
+        let roadSize = CGSize(width: Size.boardTile.width,
+                              height: 2 * Size.roadLaneWidth + Size.roadDividerWidth)
         
         let node = SKNode()
         

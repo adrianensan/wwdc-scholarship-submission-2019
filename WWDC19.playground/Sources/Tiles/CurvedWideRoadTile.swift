@@ -1,8 +1,8 @@
 import SpriteKit
 
-public class CurvedRoadTile: GrassTile {
+public class CurvedWideRoadTile: GrassTile {
     
-    override var type: TileType { return TileType.curvedRoad }
+    override var type: TileType { return TileType.curvedWideRoad }
     
     let road: SKSpriteNode
     
@@ -21,9 +21,9 @@ public class CurvedRoadTile: GrassTile {
     override public func updateSize() {
         super.updateSize()
         
-        road.texture = Texture.curvedRoad
-        road.size = Texture.curvedRoad.size()
-        let offset: CGFloat = 0.5 * Size.boardTile.width - Size.roadLaneWidth - 0.5 * Size.roadDividerWidth
+        road.texture = Texture.curvedWideRoad
+        road.size = Texture.curvedWideRoad.size()
+        let offset: CGFloat = 0.5 * Size.boardTile.width - 2 * Size.roadLaneWidth - 1.5 * Size.roadDividerWidth
         road.position = CGPoint(x: 0.5 * offset, y: -0.5 * offset)
     }
 }
