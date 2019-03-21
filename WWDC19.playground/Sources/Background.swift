@@ -33,7 +33,7 @@ public class Background: SKNode {
                 let woodBlock = SKSpriteNode()
                 woodBlock.size = Size.backgroundWoodBlock
                 woodBlock.color = Color.backgroundWoodBlock
-                woodBlock.alpha = 1 - CGFloat.random(in: 0..<0.2)
+                woodBlock.alpha = 1 - CGFloat.random(in: 0..<0.3)
                 woodBlock.position = CGPoint(x: xPosition, y: yPosition)
                 addChild(woodBlock)
                 woodBlocks.append(woodBlock)

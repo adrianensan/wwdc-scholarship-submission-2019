@@ -7,9 +7,7 @@ public struct StraightRoadTextureGenerator {
         
         let node = SKNode()
         
-        let roadNode = SKShapeNode()
-        roadNode.fillColor = Color.road
-        roadNode.lineWidth = 0
+        let roadNode = BaseShapeNodes.roadFill
         roadNode.path = {
             let path = CGMutablePath()
             path.addRect(CGRect(origin: roadSize.offset,
@@ -17,16 +15,29 @@ public struct StraightRoadTextureGenerator {
             path.closeSubpath()
             return path
         }()
-        roadNode.zPosition = 1
         node.addChild(roadNode)
+        
+        let roadNodeOutline = BaseShapeNodes.roadOutline
+        roadNodeOutline.path = {
+            let path = CGMutablePath()
+            path.addLines(between: [
+                CGPoint(x: roadSize.offset.x, y: roadSize.offset.y),
+                CGPoint(x: roadSize.offset.x + roadSize.width, y: roadSize.offset.y),
+            ])
+            path.addLines(between: [
+                CGPoint(x: roadSize.offset.x, y: roadSize.offset.y + roadSize.height),
+                CGPoint(x: roadSize.offset.x + roadSize.width, y: roadSize.offset.y + roadSize.height),
+            ])
+            path.closeSubpath()
+            return path
+        }()
+        node.addChild(roadNodeOutline)
         
         let segments = 4
         let segmentsSpacing: CGFloat = roadSize.width / CGFloat(segments)
         let segmentLength: CGFloat = 0.6 * segmentsSpacing
         for i in 0..<segments {
-            let roadDividerSegmentNode = SKShapeNode()
-            roadDividerSegmentNode.fillColor = Color.roadDivider
-            roadDividerSegmentNode.lineWidth = 0
+            let roadDividerSegmentNode = BaseShapeNodes.roadDivider
             roadDividerSegmentNode.path = {
                 let path = CGMutablePath()
                 path.addRoundedRect(in: CGRect(origin: CGPoint(x: -0.5 * (roadSize.width - segmentsSpacing + segmentLength) + CGFloat(i) * segmentsSpacing,
@@ -37,11 +48,9 @@ public struct StraightRoadTextureGenerator {
                 path.closeSubpath()
                 return path
             }()
-            roadDividerSegmentNode.zPosition = 2
             node.addChild(roadDividerSegmentNode)
         }
         
         return SKView().texture(from: node)
     }
-
 }

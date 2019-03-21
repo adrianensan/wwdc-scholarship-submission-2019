@@ -7,9 +7,7 @@ public struct CurvedRoadTextureGenerator {
         
         let node = SKNode()
         
-        let roadNode = SKShapeNode()
-        roadNode.fillColor = Color.road
-        roadNode.lineWidth = 0
+        let roadNode = BaseShapeNodes.roadFill
         roadNode.path = {
             let path = CGMutablePath()
             path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
@@ -27,14 +25,34 @@ public struct CurvedRoadTextureGenerator {
             path.closeSubpath()
             return path
         }()
-        roadNode.zPosition = 1
         node.addChild(roadNode)
+        
+        let roadNodeOutline = BaseShapeNodes.roadOutline
+        roadNodeOutline.path = {
+            let path = CGMutablePath()
+            path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
+                                        y: -0.5 * Size.boardTile.height),
+                        radius: 0.5 * (Size.boardTile.width + roadSize.height),
+                        startAngle: 0.5 * .pi,
+                        endAngle: .pi,
+                        clockwise: false)
+            path.move(to: CGPoint(x: 0.5 * Size.boardTile.width,
+                                  y: -0.5 * Size.boardTile.height + 0.5 * (Size.boardTile.height - roadSize.height)))
+            path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
+                                        y: -0.5 * Size.boardTile.height),
+                        radius: 0.5 * (Size.boardTile.width - roadSize.height),
+                        startAngle: 0.5 * .pi,
+                        endAngle: .pi,
+                        clockwise: false)
+            return path
+        }()
+        node.addChild(roadNodeOutline)
         
         let segments = 3
         let segmentsSpacing: CGFloat = 0.5 * .pi / CGFloat(segments)
         let segmentLength: CGFloat = 0.6 * segmentsSpacing
         for i in 0..<segments {
-            let roadDividerSegmentNode = SKShapeNode()
+            let roadDividerSegmentNode = BaseShapeNodes.roadDivider
             roadDividerSegmentNode.fillColor = .clear
             roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
             roadDividerSegmentNode.strokeColor = Color.roadDivider
@@ -49,7 +67,6 @@ public struct CurvedRoadTextureGenerator {
                 path.closeSubpath()
                 return path
             }()
-            roadDividerSegmentNode.zPosition = 2
             node.addChild(roadDividerSegmentNode)
         }
         

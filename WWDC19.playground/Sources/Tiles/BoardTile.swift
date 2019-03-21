@@ -3,11 +3,14 @@ import SpriteKit
 public class BoardTile: SKNode {
     
     var tile: Tile? {
+        willSet {
+            if let _ = newValue { tile?.removeFromParent() }
+        }
         didSet {
             highlighted = false
             
             guard let tile = tile else { return }
-            tile.zPosition = ZPosition.tilePlaceholder
+            tile.zPosition = 0
             tile.delegate = self
             tile.movable = editable
             tile.removeFromParent()
@@ -71,11 +74,14 @@ public class BoardTile: SKNode {
 
 extension BoardTile: NewTileDelegate {
     public func tileMoved(to point: CGPoint) {
+        tile?.zPosition = ZPosition.overlayTile
         tile = nil
         delegate?.tileMoved(to: point)
     }
     
     public func tileDropped(to point: CGPoint, tile: Tile) -> Bool {
-        return delegate?.tileDropped(to: point, tile: tile) ?? true
+        let successfullyMoved = delegate?.tileDropped(to: point, tile: tile) ?? false
+        if !successfullyMoved { tile.removeFromParent() }
+        return successfullyMoved
     }
 }

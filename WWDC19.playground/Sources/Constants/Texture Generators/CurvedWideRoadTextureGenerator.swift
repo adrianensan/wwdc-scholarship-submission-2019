@@ -7,9 +7,7 @@ public struct CurvedWideRoadTextureGenerator {
         
         let node = SKNode()
         
-        let roadNode = SKShapeNode()
-        roadNode.fillColor = Color.road
-        roadNode.lineWidth = 0
+        let roadNode = BaseShapeNodes.roadFill
         roadNode.path = {
             let path = CGMutablePath()
             path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
@@ -27,10 +25,30 @@ public struct CurvedWideRoadTextureGenerator {
             path.closeSubpath()
             return path
         }()
-        roadNode.zPosition = 1
         node.addChild(roadNode)
         
-        let roadDividerSegmentNode = SKShapeNode()
+        let roadNodeOutline = BaseShapeNodes.roadOutline
+        roadNodeOutline.path = {
+            let path = CGMutablePath()
+            path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
+                                        y: -0.5 * Size.boardTile.height),
+                        radius: 0.5 * (Size.boardTile.width + roadSize.height),
+                        startAngle: 0.5 * .pi,
+                        endAngle: .pi,
+                        clockwise: false)
+            path.move(to: CGPoint(x: 0.5 * Size.boardTile.width,
+                                  y: -0.5 * Size.boardTile.height + 0.5 * (Size.boardTile.height - roadSize.height)))
+            path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
+                                        y: -0.5 * Size.boardTile.height),
+                        radius: 0.5 * (Size.boardTile.width - roadSize.height),
+                        startAngle: 0.5 * .pi,
+                        endAngle: .pi,
+                        clockwise: false)
+            return path
+        }()
+        node.addChild(roadNodeOutline)
+        
+        let roadDividerSegmentNode = BaseShapeNodes.roadDivider
         roadDividerSegmentNode.fillColor = .clear
         roadDividerSegmentNode.strokeColor = Color.roadDivider
         roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
@@ -45,14 +63,13 @@ public struct CurvedWideRoadTextureGenerator {
             path.closeSubpath()
             return path
         }()
-        roadDividerSegmentNode.zPosition = 2
         node.addChild(roadDividerSegmentNode)
         
         let segmentsOuter = 5
         let segmentsOuterSpacing: CGFloat = 0.5 * .pi / CGFloat(segmentsOuter)
         let segmentOuterLength: CGFloat = 0.6 * segmentsOuterSpacing
         for i in 0..<segmentsOuter {
-            let roadDividerSegmentNode = SKShapeNode()
+            let roadDividerSegmentNode = BaseShapeNodes.roadDivider
             roadDividerSegmentNode.fillColor = .clear
             roadDividerSegmentNode.strokeColor = Color.roadDivider
             roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
@@ -68,7 +85,6 @@ public struct CurvedWideRoadTextureGenerator {
                 path.closeSubpath()
                 return path
             }()
-            roadDividerSegmentNode.zPosition = 2
             node.addChild(roadDividerSegmentNode)
         }
         
@@ -76,7 +92,7 @@ public struct CurvedWideRoadTextureGenerator {
         let segmentsInnerSpacing: CGFloat = 0.5 * .pi / CGFloat(segmentsInner)
         let segmentInnerLength: CGFloat = 0.6 * segmentsInnerSpacing
         for i in 0..<segmentsInner {
-            let roadDividerSegmentNode = SKShapeNode()
+            let roadDividerSegmentNode = BaseShapeNodes.roadDivider
             roadDividerSegmentNode.fillColor = .clear
             roadDividerSegmentNode.strokeColor = Color.roadDivider
             roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
@@ -92,7 +108,6 @@ public struct CurvedWideRoadTextureGenerator {
                 path.closeSubpath()
                 return path
             }()
-            roadDividerSegmentNode.zPosition = 2
             node.addChild(roadDividerSegmentNode)
         }
         

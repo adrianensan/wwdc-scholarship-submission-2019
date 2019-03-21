@@ -9,9 +9,7 @@ public struct NarrowToWideRoadTextureGenerator {
         
         let node = SKNode()
         
-        let roadNode = SKShapeNode()
-        roadNode.fillColor = Color.road
-        roadNode.lineWidth = 0
+        let roadNode = BaseShapeNodes.roadFill
         roadNode.path = {
             let path = CGMutablePath()
             path.addLines(between: [
@@ -23,39 +21,51 @@ public struct NarrowToWideRoadTextureGenerator {
                 CGPoint(x: 0.3 * Size.boardTile.width, y: smallHalfHeight),
                 CGPoint(x: -0.3 * Size.boardTile.width, y: bigHalfHeight),
                 CGPoint(x: -0.5 * Size.boardTile.width, y: bigHalfHeight)
-                
-                ])
+            ])
             path.closeSubpath()
             return path
         }()
-        roadNode.zPosition = 1
         node.addChild(roadNode)
+        
+        let roadNodeOutline = BaseShapeNodes.roadOutline
+        roadNodeOutline.path = {
+            let path = CGMutablePath()
+            path.addLines(between: [
+                CGPoint(x: -0.5 * Size.boardTile.width, y: -bigHalfHeight),
+                CGPoint(x: -0.3 * Size.boardTile.width, y: -bigHalfHeight),
+                CGPoint(x: 0.3 * Size.boardTile.width, y: -smallHalfHeight),
+                CGPoint(x: 0.5 * Size.boardTile.width, y: -smallHalfHeight)
+            ])
+            path.addLines(between: [
+                CGPoint(x: 0.5 * Size.boardTile.width, y: smallHalfHeight),
+                CGPoint(x: 0.3 * Size.boardTile.width, y: smallHalfHeight),
+                CGPoint(x: -0.3 * Size.boardTile.width, y: bigHalfHeight),
+                CGPoint(x: -0.5 * Size.boardTile.width, y: bigHalfHeight)
+            ])
+            return path
+        }()
+        node.addChild(roadNodeOutline)
         
         let segments = 4
         let segmentsSpacing: CGFloat = roadSize.width / CGFloat(segments)
         let segmentLength: CGFloat = 0.6 * segmentsSpacing
         
         // Center Dashed line
-        let roadDividerSegmentNode = SKShapeNode()
-        roadDividerSegmentNode.fillColor = Color.roadDivider
-        roadDividerSegmentNode.lineWidth = 0
+        let roadDividerSegmentNode = BaseShapeNodes.roadDivider
         roadDividerSegmentNode.path = {
             let path = CGMutablePath()
             path.addRoundedRect(in: CGRect(origin: CGPoint(x: -0.5 * (roadSize.width - segmentsSpacing + segmentLength) + 3 * segmentsSpacing,
-                                                           y: -Size.roadDividerWidth),
+                                                           y: -0.5 * Size.roadDividerWidth),
                                            size: CGSize(width: segmentLength, height: Size.roadDividerWidth)),
                                 cornerWidth: 0.5 * Size.roadDividerWidth,
                                 cornerHeight: 0.5 * Size.roadDividerWidth)
             path.closeSubpath()
             return path
         }()
-        roadDividerSegmentNode.zPosition = 2
         node.addChild(roadDividerSegmentNode)
         
         // Solid Line
-        let roadSolidDividerSegmentNode = SKShapeNode()
-        roadSolidDividerSegmentNode.fillColor = Color.roadDivider
-        roadSolidDividerSegmentNode.lineWidth = 0
+        let roadSolidDividerSegmentNode = BaseShapeNodes.roadDivider
         roadSolidDividerSegmentNode.path = {
             let path = CGMutablePath()
             path.addRoundedRect(in: CGRect(origin: CGPoint(x: -0.5 * roadSize.width,
@@ -66,14 +76,11 @@ public struct NarrowToWideRoadTextureGenerator {
             path.closeSubpath()
             return path
         }()
-        roadSolidDividerSegmentNode.zPosition = 2
         node.addChild(roadSolidDividerSegmentNode)
         
         for i in 0..<2 {
             for j in 0..<1 {
-                let roadDividerSegmentNode = SKShapeNode()
-                roadDividerSegmentNode.fillColor = Color.roadDivider
-                roadDividerSegmentNode.lineWidth = 0
+                let roadDividerSegmentNode = BaseShapeNodes.roadDivider
                 roadDividerSegmentNode.path = {
                     let path = CGMutablePath()
                     path.addRoundedRect(in: CGRect(origin: CGPoint(x: -0.5 * (roadSize.width - segmentsSpacing + segmentLength) + CGFloat(j) * segmentsSpacing,
@@ -84,7 +91,6 @@ public struct NarrowToWideRoadTextureGenerator {
                     path.closeSubpath()
                     return path
                 }()
-                roadDividerSegmentNode.zPosition = 2
                 node.addChild(roadDividerSegmentNode)
             }
         }

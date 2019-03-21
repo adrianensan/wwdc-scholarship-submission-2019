@@ -23,7 +23,7 @@ public class CurvedWideRoadTile: GrassTile {
         
         road.texture = Texture.curvedWideRoad
         road.size = Texture.curvedWideRoad.size()
-        let offset: CGFloat = 0.5 * Size.boardTile.width - 2 * Size.roadLaneWidth - 1.5 * Size.roadDividerWidth
+        let offset: CGFloat = 0.5 * Size.boardTile.width - 2 * Size.roadLaneWidth - 1.5 * Size.roadDividerWidth - 0.5 * Size.roadOutlineWidth
         road.position = CGPoint(x: 0.5 * offset, y: -0.5 * offset)
     }
 }

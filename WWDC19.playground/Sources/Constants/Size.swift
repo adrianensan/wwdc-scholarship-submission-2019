@@ -8,6 +8,7 @@ public struct Size {
     static var boardTile: CGSize = .zero
     static var roadLaneWidth: CGFloat = 0
     static var roadDividerWidth: CGFloat = 0
+    static var roadOutlineWidth: CGFloat = 0
     
     static func updateSizing(sceneSize: CGSize) {
         let unit: CGFloat = 0.01 * min(sceneSize.width, sceneSize.height)
@@ -19,6 +20,7 @@ public struct Size {
         
         roadLaneWidth = 0.2 * boardTile.height
         roadDividerWidth = 0.02 * boardTile.height
+        roadOutlineWidth = 2
         
         Texture.regenerateTextures()
     }
