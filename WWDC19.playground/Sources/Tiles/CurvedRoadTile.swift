@@ -15,7 +15,7 @@ public class CurvedRoadTile: GrassTile {
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("Class \"StraightRoadTile\" is only intended to be instantiated through code")
+        fatalError("Class \"CurvedRoadTile\" is only intended to be instantiated through code")
     }
     
     override public func updateSize() {

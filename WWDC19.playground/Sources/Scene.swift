@@ -4,13 +4,12 @@ public class Scene: SKScene {
     
     private let background: Background
     private let board: Board
-    private let tileSelector: TileSelector
-    private let car: Car
+    private let sidebar: Sidebar
     
     private var editingBoard: Bool {
         didSet {
             board.editable = editingBoard
-            tileSelector.showing = editingBoard
+            sidebar.editingBoard = editingBoard
         }
     }
     private var lastUpdateTime: TimeInterval
@@ -18,27 +17,26 @@ public class Scene: SKScene {
     override public init() {
         background = Background()
         board = Board()
-        tileSelector = TileSelector()
-        car = Car()
+        sidebar = Sidebar()
         editingBoard = false
         lastUpdateTime = Date().timeIntervalSince1970
         super.init(size: .zero)
         
+        if let fontURL = Bundle.main.url(forResource: Constant.font, withExtension: "otf") {
+            CTFontManagerRegisterFontsForURL(fontURL as CFURL, CTFontManagerScope.process, nil)
+        }
+        
         scaleMode = .resizeFill
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         backgroundColor = .black
-        setScale(0.5)
         
         background.zPosition = ZPosition.background
         addChild(background)
         
         addChild(board)
         
-        tileSelector.delegate = board
-        addChild(tileSelector)
-        
-        car.updateSize()
-        
+        sidebar.delegate = board
+        addChild(sidebar)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -69,8 +67,7 @@ public class Scene: SKScene {
         
         background.updateSize()
         board.updateSize()
-        tileSelector.updateSize()
-        car.updateSize()
+        sidebar.updateSize()
     }
     
     override public func update(_ currentTime: TimeInterval) {

@@ -2,18 +2,11 @@ import SpriteKit
 
 public class TileSelector: SKNode {
     
-    let background: SKSpriteNode
     var tiles: [Tile]
     
     var delegate: NewTileDelegate?
-    var showing: Bool {
-        didSet {
-            updatePositioning()
-        }
-    }
     
     public override init() {
-        background = SKSpriteNode()
         tiles = {
             var tiles = [Tile]()
             for tileType in TileType.allCases {
@@ -21,12 +14,7 @@ public class TileSelector: SKNode {
             }
             return tiles
         }()
-        showing = false
         super.init()
-        
-        background.color = .black
-        background.zPosition = ZPosition.overlay
-        addChild(background)
         
         for tile in tiles {
             tile.delegate = self
@@ -41,12 +29,6 @@ public class TileSelector: SKNode {
     }
     
     public func updateSize() {
-        let longSide = Size.sceneSize.width > Size.sceneSize.height ? \CGSize.height : \CGSize.width
-        let shortSide = Size.sceneSize.width > Size.sceneSize.height ? \CGSize.width : \CGSize.height
-        
-        background.size[keyPath: shortSide] = 1.5 * Size.boardTile[keyPath: shortSide]
-        background.size[keyPath: longSide] = Size.sceneSize[keyPath: longSide]
-        
         for tile in tiles { tile.updateSize() }
         updatePositioning()
     }
@@ -55,19 +37,22 @@ public class TileSelector: SKNode {
 
     }
     
-    private func updatePositioning() {
+    private func updatePositioning(animate: Bool = false) {
         let longSide = Size.sceneSize.width > Size.sceneSize.height ? \CGSize.height : \CGSize.width
         let shortSide = Size.sceneSize.width > Size.sceneSize.height ? \CGSize.width : \CGSize.height
         let point1 = Size.sceneSize.width > Size.sceneSize.height ? \CGPoint.x : \CGPoint.y
         let point2 = Size.sceneSize.width > Size.sceneSize.height ? \CGPoint.y : \CGPoint.x
         
-        background.position[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] + 0.5 * background.size[keyPath: shortSide] * (showing ? -1 : 1)
-        background.position[keyPath: point2] = 0
+        let pos: CGFloat = 0.5 * Size.sceneSize[keyPath: shortSide] - 0.75 * Size.boardTile[keyPath: shortSide]
+        
         for i in 0..<tiles.count {
             let spacing = 1.25 * Size.boardTile.height
-            tiles[i].position[keyPath: point1] = background.position[keyPath: point1]
-            tiles[i].position[keyPath: point2] = (Size.sceneSize.width > Size.sceneSize.height ? 1 : -1) *
-                (0.5 * (CGFloat(tiles.count) - 1) * spacing - CGFloat(i) * spacing)
+            var target: CGPoint = .zero
+            target[keyPath: point1] = pos - ((i < 4 ? spacing : 0)) 
+            target[keyPath: point2] = (Size.sceneSize.width > Size.sceneSize.height ? 1 : -1) *
+                (1.5 * spacing - CGFloat(i % 4) * spacing)
+            tiles[i].run(.move(to: target, duration: animate ? Duration.magnetSnapAnimation : 0))
+            tiles[i].zPosition = ZPosition.overlayTile
         }
     }
 }
@@ -87,8 +72,15 @@ extension TileSelector: NewTileDelegate {
             tiles[index].zPosition = ZPosition.overlayTile
             tiles[index].updateSize()
             addChild(tiles[index])
+            
+            tiles[index].setScale(0)
+            tiles[index].run(.sequence([
+                .scale(to: 1.2, duration: 0.1),
+                .scale(to: 1, duration: 0.05)
+            ]))
+            updatePositioning()
         }
-        updatePositioning()
+        updatePositioning(animate: true)
         return successfullyDropped
     }
 }

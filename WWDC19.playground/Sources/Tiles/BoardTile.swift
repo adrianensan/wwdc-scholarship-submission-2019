@@ -24,7 +24,12 @@ public class BoardTile: SKNode {
     var delegate: NewTileDelegate?
     
     var editable: Bool {
-        didSet { tile?.movable = editable }
+        didSet {
+            tile?.movable = editable
+            placeholderTile.run(.group([
+                .fadeAlpha(to: editable ? 1 : 0, duration: Duration.magnetSnapAnimation)
+            ]))
+        }
     }
     
     var highlighted: Bool {
@@ -50,25 +55,19 @@ public class BoardTile: SKNode {
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("Class \"PlaceholderTile\" is only intended to be instantiated through code")
+        fatalError("Class \"BoardTile\" is only intended to be instantiated through code")
     }
     
     public func updateSize() {
         placeholderTile.updateSize()
         highlightOverlay.size = Size.boardTile
         tile?.updateSize()
-        tile?.position = position
+        tile?.run(.move(to: position, duration: Duration.magnetSnapAnimation))
     }
     
     public func update(_ delta: CGFloat) {
         placeholderTile.update(delta)
         tile?.update(delta)
-        if editable && placeholderTile.alpha < 1 {
-            placeholderTile.alpha += delta * 10
-        }
-        else if !editable && placeholderTile.alpha > 0 {
-            placeholderTile.alpha -= delta * 10
-        }
     }
 }
 

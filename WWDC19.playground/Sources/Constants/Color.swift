@@ -10,4 +10,3 @@ public struct Color {
     static let roadDivider = SKColor(red: 1, green: 1, blue: 1, alpha: 1)
     static let yellowRoadDivider = SKColor(red: 0.86, green: 0.54, blue: 0.31, alpha: 1)
 }
-

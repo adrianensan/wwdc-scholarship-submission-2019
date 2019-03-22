@@ -11,6 +11,11 @@ public struct ZPosition {
     
     static let tileHighlight: CGFloat = 9
     
-    static let overlay: CGFloat = 10
-    static let overlayTile: CGFloat = 11
+    static let carWheel: CGFloat = -1
+    static let car: CGFloat = 15
+    
+    static let overlay: CGFloat = 100
+    static let overlayTile: CGFloat = 102
+    
+    static let topLevelDragging: CGFloat = 200
 }

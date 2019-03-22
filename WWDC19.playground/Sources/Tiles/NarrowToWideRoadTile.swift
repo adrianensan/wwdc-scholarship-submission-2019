@@ -15,7 +15,7 @@ public class NarrowToWideRoadTile: GrassTile {
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("Class \"StraightRoadTile\" is only intended to be instantiated through code")
+        fatalError("Class \"NarrowToWideRoadTile\" is only intended to be instantiated through code")
     }
     
     override public func updateSize() {

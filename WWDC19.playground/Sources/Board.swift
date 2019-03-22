@@ -6,15 +6,21 @@ public class Board: SKNode {
     
     public var editable: Bool {
         didSet {
+            var delays = [Int](0..<(Board.tileCount * Board.tileCount))
+            delays.shuffle()
             for i in 0..<Board.tileCount {
                 for j in 0..<Board.tileCount {
-                    tiles[i][j].editable = editable
+                    tiles[i][j].run(.sequence([
+                        .wait(forDuration: 0.005 * Double(delays.removeLast())),
+                        .run { self.tiles[i][j].editable = self.editable }
+                    ]))
                 }
             }
         }
     }
     
     private let tiles: [[BoardTile]]
+    private var boardObjects: [BoardObject]
     
     public override init() {
         tiles = {
@@ -27,6 +33,7 @@ public class Board: SKNode {
             }
             return tiles
         }()
+        boardObjects = [BoardObject]()
         editable = false
         super.init()
         
@@ -36,6 +43,12 @@ public class Board: SKNode {
                 addChild(tile)
             }
         }
+        
+        let car = Car()
+        car.zPosition = 40
+        car.delegate = self
+        boardObjects.append(car)
+        addChild(car)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -50,6 +63,10 @@ public class Board: SKNode {
                 tiles[i][j].position.y = -0.5 * (Size.board.height - Size.boardTile.height) + CGFloat(j) * Size.boardTile.height
             }
         }
+        
+        for boardObject in boardObjects {
+            boardObject.updateSize()
+        }
     }
     
     public func update(_ delta: CGFloat) {
@@ -57,6 +74,10 @@ public class Board: SKNode {
             for j in 0..<Board.tileCount {
                 tiles[i][j].update(delta)
             }
+        }
+        
+        for boardObject in boardObjects {
+            boardObject.update(delta: delta)
         }
     }
 }
@@ -86,5 +107,12 @@ extension Board: NewTileDelegate {
             if let node = node as? BoardTile { return node }
         }
         return nil
+    }
+}
+
+extension Board: CarDelegate {
+    public func queryNearestRoadTangent(point: CGPoint, direction: CGFloat) -> (point: CGPoint, tangent: CGFloat) {
+        let boardTile = getTileAt(point: point)
+        return (point: CGPoint(x: -100, y: -100), tangent: 0.5 * .pi)
     }
 }

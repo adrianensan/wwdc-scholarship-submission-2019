@@ -31,7 +31,7 @@ public class Tile: SKNode {
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        zPosition = ZPosition.topLevelDragging
     }
     
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
