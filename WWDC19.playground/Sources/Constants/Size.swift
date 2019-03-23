@@ -3,7 +3,7 @@ import SpriteKit
 public struct Size {
 
     static var sceneSize: CGSize = .zero
-    static var sceneRadius: CGSize = .zero
+    static var sceneObjectRadius: CGFloat = 0
     
     static var backgroundWoodBlock: CGSize = .zero
     
@@ -27,6 +27,8 @@ public struct Size {
         let unit: CGFloat = 0.01 * min(sceneSize.width, sceneSize.height)
         
         Size.sceneSize = sceneSize
+        
+        sceneObjectRadius = 0.75 * sceneSize.diagonal
         
         backgroundWoodBlock = CGSize(width: 35 * unit, height: 5.1 * unit)
         

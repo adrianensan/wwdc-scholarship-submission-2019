@@ -98,8 +98,12 @@ public class Board: SKNode {
             }
         }
         
-        for boardObject in boardObjects {
-            boardObject.update(delta: delta)
+        for i in (0..<boardObjects.count).reversed() {
+            boardObjects[i].update(delta: delta)
+            if boardObjects[i].position.distance > Size.sceneObjectRadius {
+                boardObjects[i].removeFromParent()
+                boardObjects.remove(at: i)
+            }
         }
     }
     

@@ -25,6 +25,10 @@ extension CGSize {
     var ceneteredRect: CGRect {
         return CGRect(origin: offset, size: self)
     }
+    
+    var diagonal: CGFloat {
+        return sqrt(width * width + height * height)
+    }
 }
 
 extension CGRect {
@@ -35,6 +39,13 @@ extension CGRect {
     
     func originOffsetFromCenter(offset: CGSize) -> CGPoint {
         return CGPoint(x: origin.x + 0.5 * (width - offset.width), y: origin.y + 0.5 * (height - offset.height))
+    }
+}
+
+extension CGPoint {
+    
+    var distance: CGFloat {
+        return sqrt(x * x + y * y)
     }
 }
 
