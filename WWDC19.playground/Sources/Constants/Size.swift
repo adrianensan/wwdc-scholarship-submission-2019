@@ -3,6 +3,7 @@ import SpriteKit
 public struct Size {
 
     static var sceneSize: CGSize = .zero
+    static var sceneRadius: CGSize = .zero
     
     static var backgroundWoodBlock: CGSize = .zero
     
@@ -15,6 +16,12 @@ public struct Size {
     static var roadOutlineWidth: CGFloat = 0
     
     static var secondaryFontSize: CGFloat = 0
+    static var titleFontSize: CGFloat = 0
+    static var subTitleFontSize: CGFloat = 0
+    
+    static var sidebarWidth: CGFloat = 0
+    static var carWidth: CGFloat = 0
+    static var carHeight: CGFloat = 0
     
     static func updateSizing(sceneSize: CGSize) {
         let unit: CGFloat = 0.01 * min(sceneSize.width, sceneSize.height)
@@ -32,7 +39,14 @@ public struct Size {
         roadDividerWidth = 0.02 * boardTile.height
         roadOutlineWidth = 2
         
+        titleFontSize = 3 * unit
+        subTitleFontSize = 2 * unit
         secondaryFontSize = 1.8 * unit
+        
+        sidebarWidth = 2.75 * Size.boardTile.width
+        
+        carWidth = 0.75 * Size.roadLaneWidth
+        carHeight = 2.2 * carWidth
         
         Texture.regenerateTextures()
     }

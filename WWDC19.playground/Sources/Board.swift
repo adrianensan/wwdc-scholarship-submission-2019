@@ -6,15 +6,17 @@ public class Board: SKNode {
     
     public var editable: Bool {
         didSet {
-            var delays = [Int](0..<(Board.tileCount * Board.tileCount))
-            delays.shuffle()
+            updatePositioning()
             for i in 0..<Board.tileCount {
                 for j in 0..<Board.tileCount {
                     tiles[i][j].run(.sequence([
-                        .wait(forDuration: 0.005 * Double(delays.removeLast())),
+                        .wait(forDuration: Double(editable ? (Board.tileCount - i) * Board.tileCount : i * Board.tileCount) * 0.005),
                         .run { self.tiles[i][j].editable = self.editable }
                     ]))
                 }
+            }
+            for boardObject in boardObjects {
+                boardObject.run(.fadeAlpha(to: editable ? 0 : 1, duration: Duration.magnetSnapAnimation))
             }
         }
     }
@@ -43,29 +45,49 @@ public class Board: SKNode {
                 addChild(tile)
             }
         }
-        
-        let car = Car()
-        car.zPosition = 40
-        car.delegate = self
-        boardObjects.append(car)
-        addChild(car)
     }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("Class \"Baord\" is only intended to be instantiated through code")
     }
     
+    public func clear() {
+        for i in 0..<Board.tileCount {
+            for j in 0..<Board.tileCount {
+                tiles[i][j].tile?.removeFromParent()
+                tiles[i][j].tile = nil
+            }
+        }
+    }
+    
     public func updateSize() {
         for i in 0..<Board.tileCount {
             for j in 0..<Board.tileCount {
                 tiles[i][j].updateSize()
-                tiles[i][j].position.x = -0.5 * (Size.board.width - Size.boardTile.width) + CGFloat(i) * Size.boardTile.width
-                tiles[i][j].position.y = -0.5 * (Size.board.height - Size.boardTile.height) + CGFloat(j) * Size.boardTile.height
             }
         }
         
         for boardObject in boardObjects {
             boardObject.updateSize()
+        }
+        
+        updatePositioning()
+    }
+    
+    public func updatePositioning() {
+        for i in 0..<Board.tileCount {
+            for j in 0..<Board.tileCount {
+                var newPosition: CGPoint = .zero
+                newPosition.x = -0.5 * (Size.board.width - Size.boardTile.width) + CGFloat(i) * Size.boardTile.width
+                newPosition.y = -0.5 * (Size.board.height - Size.boardTile.height) + CGFloat(j) * Size.boardTile.height
+                let point1 = Size.sceneSize.width > Size.sceneSize.height ? \CGPoint.x : \CGPoint.y
+                newPosition[keyPath: point1] -= (editable ? 0.5 : 0.175) * 2.75 * Size.boardTile.width
+                
+                tiles[i][j].run(.move(to: newPosition, duration: Duration.magnetSnapAnimation),
+                                timingMode: .easeInEaseOut)
+                tiles[i][j].tile?.run(.move(to: newPosition, duration: Duration.magnetSnapAnimation),
+                                      timingMode: .easeInEaseOut)
+            }
         }
     }
     
@@ -79,6 +101,35 @@ public class Board: SKNode {
         for boardObject in boardObjects {
             boardObject.update(delta: delta)
         }
+    }
+    
+    private func getTileAt(point: CGPoint) -> BoardTile? {
+        for node in nodes(at: point) {
+            if let node = node as? BoardTile { return node }
+        }
+        return nil
+    }
+}
+
+extension Board: BoardObjectDelegate {
+    public func objectMoved(to point: CGPoint) {
+        let tile = getTileAt(point: point)
+        if tile == nil || !tile!.highlighted {
+            for i in 0..<Board.tileCount {
+                for j in 0..<Board.tileCount {
+                    //tiles[i][j].highlighted = false
+                }
+            }
+        }
+        
+        //tile?.highlighted = true
+    }
+    
+    public func objectDropped(object: BoardObject) -> Bool {
+        guard let boardTile = getTileAt(point: object.position), let _ = boardTile.tile else { return false }
+        boardObjects.append(object)
+        object.move(toParent: self)
+        return true
     }
 }
 
@@ -100,13 +151,6 @@ extension Board: NewTileDelegate {
         guard let boardTile = getTileAt(point: point) else { return false }
         boardTile.tile = tile
         return true
-    }
-    
-    private func getTileAt(point: CGPoint) -> BoardTile? {
-        for node in nodes(at: point) {
-            if let node = node as? BoardTile { return node }
-        }
-        return nil
     }
 }
 

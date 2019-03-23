@@ -10,12 +10,13 @@ public class BoardTile: SKNode {
             highlighted = false
             
             guard let tile = tile else { return }
-            tile.zPosition = 0
             tile.delegate = self
             tile.movable = editable
             tile.removeFromParent()
             parent?.addChild(tile)
-            updateSize()
+            tile.run(.move(to: position, duration: Duration.magnetSnapAnimation)) {
+                tile.zPosition = 0
+            }
         }
     }
     private let placeholderTile: PlaceholderTile
@@ -33,8 +34,12 @@ public class BoardTile: SKNode {
     }
     
     var highlighted: Bool {
-        get { return !highlightOverlay.isHidden }
-        set { highlightOverlay.isHidden = !newValue }
+        get { return highlightOverlay.alpha == 1 }
+        set {
+            highlightOverlay.run(.fadeAlpha(to: newValue ? 1 : 0,
+                                            duration: Duration.magnetSnapAnimation))
+            
+        }
     }
     
     public override init() {
@@ -49,7 +54,7 @@ public class BoardTile: SKNode {
         addChild(placeholderTile)
         
         highlightOverlay.color = SKColor(white: 1, alpha: 0.25)
-        highlightOverlay.isHidden = true
+        highlightOverlay.alpha = 0
         highlightOverlay.zPosition = ZPosition.tileHighlight
         addChild(highlightOverlay)
     }
@@ -62,7 +67,6 @@ public class BoardTile: SKNode {
         placeholderTile.updateSize()
         highlightOverlay.size = Size.boardTile
         tile?.updateSize()
-        tile?.run(.move(to: position, duration: Duration.magnetSnapAnimation))
     }
     
     public func update(_ delta: CGFloat) {

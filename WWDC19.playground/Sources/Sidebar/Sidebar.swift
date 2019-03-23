@@ -2,6 +2,14 @@ import SpriteKit
 
 public class Sidebar: SKNode {
     
+    var objectDelegate: BoardObjectDelegate? {
+        get { return carSection.objectDelegate }
+        set {
+            carSection.objectDelegate = newValue
+            
+        }
+    }
+    
     var tileDelegate: NewTileDelegate? {
         get { return tileSelector.delegate }
         set { tileSelector.delegate = newValue }
@@ -19,11 +27,15 @@ public class Sidebar: SKNode {
         didSet {
             updatePositioning()
             editBoardButton.text = editingBoard ? "OK" : "Edit Board"
+            
+            carSection.editingBoard = editingBoard
         }
     }
     
     private let background: SKSpriteNode
     private let tileSelector: TileSelector
+    
+    private var carSection: CarSidebarSection
     
     private var editBoardButton: Button
     private var clearBoardButton: Button
@@ -31,6 +43,7 @@ public class Sidebar: SKNode {
     public override init() {
         background = SKSpriteNode()
         tileSelector = TileSelector()
+        carSection = CarSidebarSection()
         editBoardButton = Button(id: ID.editBoardButton)
         clearBoardButton = Button(id: ID.clearBoardButton)
         editingBoard = false
@@ -41,6 +54,8 @@ public class Sidebar: SKNode {
         addChild(background)
         
         addChild(tileSelector)
+        
+        addChild(carSection)
         
         editBoardButton.text = "Edit Board"
         editBoardButton.color = Color.buttonBlue
@@ -54,7 +69,7 @@ public class Sidebar: SKNode {
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("Class \"TileSelector\" is only intended to be instantiated through code")
+        fatalError("Class \"Sidebar\" is only intended to be instantiated through code")
     }
     
     public func updateSize() {
@@ -65,6 +80,8 @@ public class Sidebar: SKNode {
         background.size[keyPath: longSide] = Size.sceneSize[keyPath: longSide]
         
         tileSelector.updateSize()
+        
+        carSection.updateSize()
         
         editBoardButton.updateSize()
         clearBoardButton.updateSize()
@@ -81,12 +98,13 @@ public class Sidebar: SKNode {
         let point1 = Size.sceneSize.width > Size.sceneSize.height ? \CGPoint.x : \CGPoint.y
         let point2 = Size.sceneSize.width > Size.sceneSize.height ? \CGPoint.y : \CGPoint.x
         
-        let offset: CGFloat = (editingBoard ? -0.5 : 0.125) * background.size[keyPath: shortSide]
+        let offset: CGFloat = (editingBoard ? -0.5 : 0) * background.size[keyPath: shortSide]
         
-        var targetPosition: CGPoint = .zero
-        targetPosition[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] + offset
-        targetPosition[keyPath: point2] = 0
-        background.run(.move(to: targetPosition, duration: Duration.magnetSnapAnimation))
+        var backgroundTargetPosition: CGPoint = .zero
+        backgroundTargetPosition[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] + offset
+        backgroundTargetPosition[keyPath: point2] = 0
+        background.run(.move(to: backgroundTargetPosition, duration: Duration.magnetSnapAnimation),
+                       timingMode: .easeInEaseOut)
         
         var tileSelectorTargetPosition: CGPoint = .zero
         tileSelectorTargetPosition[keyPath: point1] = (editingBoard ? 0 : 0.5) * background.size[keyPath: shortSide]
@@ -94,12 +112,16 @@ public class Sidebar: SKNode {
         tileSelector.run(.group([
             .move(to: tileSelectorTargetPosition, duration: Duration.magnetSnapAnimation),
             .fadeAlpha(to: editingBoard ? 1 : 0, duration: Duration.magnetSnapAnimation)
-        ]))
+        ]), timingMode: .easeInEaseOut)
+        
+        carSection.position[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] - 0.25 * background.size[keyPath: shortSide]
+        carSection.position[keyPath: point2] = 0
         
         var editBoardButtonTargetPosition: CGPoint = .zero
-        editBoardButtonTargetPosition[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] - (editingBoard ? 0.725 : 0.175) * background.size[keyPath: shortSide]
+        editBoardButtonTargetPosition[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] - (editingBoard ? 0.725 : 0.25) * background.size[keyPath: shortSide]
         editBoardButtonTargetPosition[keyPath: point2] = (Size.sceneSize.width > Size.sceneSize.height ? 2.5 : -2.5) * Size.boardTile.height
-        editBoardButton.run(.move(to: editBoardButtonTargetPosition, duration: Duration.magnetSnapAnimation))
+        editBoardButton.run(.move(to: editBoardButtonTargetPosition, duration: Duration.magnetSnapAnimation),
+                            timingMode: .easeInEaseOut)
         
         var clearBoardButtonTargetPosition: CGPoint = .zero
         clearBoardButtonTargetPosition[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] - (editingBoard ? 0.275 : -0.25) * background.size[keyPath: shortSide]
@@ -107,6 +129,6 @@ public class Sidebar: SKNode {
         clearBoardButton.run(.group([
             .move(to: clearBoardButtonTargetPosition, duration: Duration.magnetSnapAnimation),
             .fadeAlpha(to: editingBoard ? 1 : 0, duration: Duration.magnetSnapAnimation)
-        ]))
+        ]), timingMode: .easeInEaseOut)
     }
 }

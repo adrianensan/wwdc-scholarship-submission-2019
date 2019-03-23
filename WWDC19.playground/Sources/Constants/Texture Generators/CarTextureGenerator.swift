@@ -2,10 +2,10 @@ import SpriteKit
 
 public struct CarTextureGenerator {
     static func generate() -> SKTexture! {
-        let width: CGFloat = 2.75 * Size.roadLaneWidth
+        let width: CGFloat = Size.carWidth
         let halfWidth: CGFloat = 0.5 * width
         
-        let halfHeight: CGFloat = 1.35 * width
+        let halfHeight: CGFloat = 0.5 * Size.carHeight
         
         let carNode = SKNode()
         

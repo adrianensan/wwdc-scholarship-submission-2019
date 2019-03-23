@@ -35,6 +35,7 @@ public class Scene: SKScene {
         
         addChild(board)
         
+        sidebar.objectDelegate = board
         sidebar.tileDelegate = board
         sidebar.buttonDelegate = self
         addChild(sidebar)
@@ -94,7 +95,7 @@ extension Scene: ButtonDelegate {
     func buttonTapped(id: Int) {
         switch id {
         case ID.editBoardButton: editingBoard = !editingBoard
-        case ID.clearBoardButton: break
+        case ID.clearBoardButton: board.clear()
         default: return
         }
     }

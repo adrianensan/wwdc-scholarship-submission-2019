@@ -37,3 +37,10 @@ extension CGRect {
         return CGPoint(x: origin.x + 0.5 * (width - offset.width), y: origin.y + 0.5 * (height - offset.height))
     }
 }
+
+extension SKNode {
+    func run(_ action: SKAction, timingMode: SKActionTimingMode) {
+        action.timingMode = timingMode
+        run(action)
+    }
+}

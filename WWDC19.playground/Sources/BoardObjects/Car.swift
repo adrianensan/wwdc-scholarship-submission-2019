@@ -5,7 +5,7 @@ public class Car: BoardObject {
     public static let maxTurnSpeedPerSecond: CGFloat = .pi
     public static let maxDriveSpeedPerSecond: CGFloat = .pi
     
-    public var delegate: CarDelegate?
+    public var carDelegate: CarDelegate?
     
     private let shape: SKSpriteNode
     private let wheels: [SKSpriteNode]
@@ -49,7 +49,7 @@ public class Car: BoardObject {
     }
     
     override public func update(delta: CGFloat) {
-        let target = delegate?.queryNearestRoadTangent(point: position, direction: zRotation)
+        let target = carDelegate?.queryNearestRoadTangent(point: position, direction: zRotation)
         let turnAmount: CGFloat = min(0.1 * ((target?.tangent ?? zRotation) - zRotation), Car.maxTurnSpeedPerSecond)
         zRotation += turnAmount * delta * 15
         for wheel in frontWheels { wheel.zRotation = turnAmount * 7.5 }
