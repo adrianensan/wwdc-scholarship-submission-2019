@@ -3,6 +3,9 @@ import SpriteKit
 public struct Texture {
     
     static var backgroundWoodBlock: SKTexture!
+    
+    static var buttonShape: SKTexture!
+    
     static var car: SKTexture!
     
     // Tiles
@@ -19,6 +22,9 @@ public struct Texture {
     
     static func regenerateTextures() {
         backgroundWoodBlock = BackgroundWoodBlockGenerator.generate()
+        
+        buttonShape = ButtonShapeTextureGenerator.generate()
+        
         car = CarTextureGenerator.generate()
         
         tileShadow = TileShadowTextureGenerator.generate()

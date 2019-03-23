@@ -50,7 +50,7 @@ public class TileSelector: SKNode {
             var target: CGPoint = .zero
             target[keyPath: point1] = pos - ((i < 4 ? spacing : 0)) 
             target[keyPath: point2] = (Size.sceneSize.width > Size.sceneSize.height ? 1 : -1) *
-                (1.5 * spacing - CGFloat(i % 4) * spacing)
+                (1 * spacing - CGFloat(i % 4) * spacing)
             tiles[i].run(.move(to: target, duration: animate ? Duration.magnetSnapAnimation : 0))
             tiles[i].zPosition = ZPosition.overlayTile
         }

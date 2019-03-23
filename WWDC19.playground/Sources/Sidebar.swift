@@ -2,26 +2,37 @@ import SpriteKit
 
 public class Sidebar: SKNode {
     
-    let background: SKSpriteNode
-    var tileSelector: TileSelector
-    
-    var editBoardButton: SKLabelNode
-    
-    var delegate: NewTileDelegate? {
+    var tileDelegate: NewTileDelegate? {
         get { return tileSelector.delegate }
         set { tileSelector.delegate = newValue }
+    }
+    
+    var buttonDelegate: ButtonDelegate? {
+        get { return editBoardButton.delegate }
+        set {
+            editBoardButton.delegate = newValue
+            clearBoardButton.delegate = newValue
+        }
     }
     
     var editingBoard: Bool {
         didSet {
             updatePositioning()
+            editBoardButton.text = editingBoard ? "OK" : "Edit Board"
         }
     }
+    
+    private let background: SKSpriteNode
+    private let tileSelector: TileSelector
+    
+    private var editBoardButton: Button
+    private var clearBoardButton: Button
     
     public override init() {
         background = SKSpriteNode()
         tileSelector = TileSelector()
-        editBoardButton = SKLabelNode()
+        editBoardButton = Button(id: ID.editBoardButton)
+        clearBoardButton = Button(id: ID.clearBoardButton)
         editingBoard = false
         super.init()
         
@@ -32,10 +43,14 @@ public class Sidebar: SKNode {
         addChild(tileSelector)
         
         editBoardButton.text = "Edit Board"
-        editBoardButton.fontName = Constant.font
-        editBoardButton.verticalAlignmentMode = .center
-        editBoardButton.isUserInteractionEnabled = true
-        background.addChild(editBoardButton)
+        editBoardButton.color = Color.buttonBlue
+        editBoardButton.zPosition = ZPosition.overlayTile
+        addChild(editBoardButton)
+        
+        clearBoardButton.text = "Clear Board"
+        clearBoardButton.color = Color.buttonRed
+        clearBoardButton.zPosition = ZPosition.overlayTile
+        addChild(clearBoardButton)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -51,7 +66,8 @@ public class Sidebar: SKNode {
         
         tileSelector.updateSize()
         
-        editBoardButton.fontSize = Size.secondaryFontSize
+        editBoardButton.updateSize()
+        clearBoardButton.updateSize()
         updatePositioning()
     }
     
@@ -65,7 +81,7 @@ public class Sidebar: SKNode {
         let point1 = Size.sceneSize.width > Size.sceneSize.height ? \CGPoint.x : \CGPoint.y
         let point2 = Size.sceneSize.width > Size.sceneSize.height ? \CGPoint.y : \CGPoint.x
         
-        let offset: CGFloat = (editingBoard ? -0.5 : 0.25) * background.size[keyPath: shortSide]
+        let offset: CGFloat = (editingBoard ? -0.5 : 0.125) * background.size[keyPath: shortSide]
         
         var targetPosition: CGPoint = .zero
         targetPosition[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] + offset
@@ -80,8 +96,17 @@ public class Sidebar: SKNode {
             .fadeAlpha(to: editingBoard ? 1 : 0, duration: Duration.magnetSnapAnimation)
         ]))
         
-        editBoardButton.position[keyPath: point1] = -0.5 * background.size[keyPath: shortSide]
-        editBoardButton.position[keyPath: point2] = (Size.sceneSize.width > Size.sceneSize.height ? 0.4 : -0.4) * Size.sceneSize[keyPath: longSide]
+        var editBoardButtonTargetPosition: CGPoint = .zero
+        editBoardButtonTargetPosition[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] - (editingBoard ? 0.725 : 0.175) * background.size[keyPath: shortSide]
+        editBoardButtonTargetPosition[keyPath: point2] = (Size.sceneSize.width > Size.sceneSize.height ? 2.5 : -2.5) * Size.boardTile.height
+        editBoardButton.run(.move(to: editBoardButtonTargetPosition, duration: Duration.magnetSnapAnimation))
         
+        var clearBoardButtonTargetPosition: CGPoint = .zero
+        clearBoardButtonTargetPosition[keyPath: point1] = 0.5 * Size.sceneSize[keyPath: shortSide] - (editingBoard ? 0.275 : -0.25) * background.size[keyPath: shortSide]
+        clearBoardButtonTargetPosition[keyPath: point2] = (Size.sceneSize.width > Size.sceneSize.height ? 2.5 : -2.5) * Size.boardTile.height
+        clearBoardButton.run(.group([
+            .move(to: clearBoardButtonTargetPosition, duration: Duration.magnetSnapAnimation),
+            .fadeAlpha(to: editingBoard ? 1 : 0, duration: Duration.magnetSnapAnimation)
+        ]))
     }
 }

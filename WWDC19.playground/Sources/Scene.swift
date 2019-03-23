@@ -35,7 +35,8 @@ public class Scene: SKScene {
         
         addChild(board)
         
-        sidebar.delegate = board
+        sidebar.tileDelegate = board
+        sidebar.buttonDelegate = self
         addChild(sidebar)
     }
     
@@ -45,7 +46,6 @@ public class Scene: SKScene {
     
     override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { touchDown(atPoint: t.location(in: self)) }
-        editingBoard = !editingBoard
     }
     
     override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -90,3 +90,12 @@ public class Scene: SKScene {
     }
 }
 
+extension Scene: ButtonDelegate {
+    func buttonTapped(id: Int) {
+        switch id {
+        case ID.editBoardButton: editingBoard = !editingBoard
+        case ID.clearBoardButton: break
+        default: return
+        }
+    }
+}

@@ -21,6 +21,10 @@ extension CGSize {
     var offset: CGPoint {
         return CGPoint(x: -0.5 * width, y: -0.5 * height)
     }
+    
+    var ceneteredRect: CGRect {
+        return CGRect(origin: offset, size: self)
+    }
 }
 
 extension CGRect {

@@ -17,5 +17,8 @@ public struct ZPosition {
     static let overlay: CGFloat = 100
     static let overlayTile: CGFloat = 102
     
+    static let buttonBackground: CGFloat = 110
+    static let buttonText: CGFloat = 111
+    
     static let topLevelDragging: CGFloat = 200
 }
