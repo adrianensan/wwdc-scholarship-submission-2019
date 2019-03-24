@@ -49,7 +49,13 @@ public enum TileType: CaseIterable {
                                          direction: direction,
                                          tilePosition: tilePosition,
                                          tileRotation: tileRotation)
-        case .curvedWideRoad: return .zero
+        case .curvedWideRoad:
+            let distFromCenter: CGFloat = 1.5 * (Size.roadLaneWidth + Size.roadDividerWidth)
+            targetPoint = curveRoadCheck(lane: distFromCenter,
+                                         point: point,
+                                         direction: direction,
+                                         tilePosition: tilePosition,
+                                         tileRotation: tileRotation)
         }
         
         return targetPoint
@@ -82,8 +88,8 @@ public enum TileType: CaseIterable {
                                tilePosition: CGPoint,
                                tileRotation: CGFloat) -> CGPoint {
         var targetPoint = CGPoint()
-        let roadCurveCenter = CGPoint(x: tilePosition.x + 0.5 * Size.boardTile.width,
-                                      y: tilePosition.y - 0.5 * Size.boardTile.height)
+        
+        let roadCurveCenter = tilePosition + (0.5 * Size.boardTile.diagonal).inDirectionOf(rotation: -0.25 * .pi + tileRotation)
         var angle = roadCurveCenter.angle(to: point)
         if abs(CGFloat.shortestAngle(from: direction, to: angle + 0.5 * .pi)) < 0.5 * .pi {
             angle += 0.05
