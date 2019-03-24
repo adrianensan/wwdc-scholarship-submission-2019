@@ -18,11 +18,13 @@ public class Board: SKNode {
             for boardObject in boardObjects {
                 boardObject.run(.fadeAlpha(to: editable ? 0 : 1, duration: Duration.magnetSnapAnimation))
             }
+            boardTileOptionsPopup.tile = nil
         }
     }
     
     private let tiles: [[BoardTile]]
     private var boardObjects: [BoardObject]
+    private var boardTileOptionsPopup: BoardTileOptionsPopup
     
     public override init() {
         tiles = {
@@ -36,15 +38,19 @@ public class Board: SKNode {
             return tiles
         }()
         boardObjects = [BoardObject]()
+        boardTileOptionsPopup = BoardTileOptionsPopup()
         editable = false
         super.init()
         
         for row in tiles {
             for tile in row {
                 tile.delegate = self
+                tile.boardTileDelegate = self
                 addChild(tile)
             }
         }
+        
+        addChild(boardTileOptionsPopup)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -70,7 +76,7 @@ public class Board: SKNode {
         for boardObject in boardObjects {
             boardObject.updateSize()
         }
-        
+        boardTileOptionsPopup.updateSize()
         updatePositioning()
     }
     
@@ -138,6 +144,12 @@ extension Board: BoardObjectDelegate {
     }
 }
 
+extension Board: BoardTileDelegate {
+    func tileSelected(tile: Tile?) {
+        boardTileOptionsPopup.tile = tile
+    }
+}
+
 extension Board: NewTileDelegate {
     public func tileMoved(to point: CGPoint) {
         let tile = getTileAt(point: point)
@@ -152,8 +164,8 @@ extension Board: NewTileDelegate {
         tile?.highlighted = true
     }
     
-    public func tileDropped(to point: CGPoint, tile: Tile) -> Bool {
-        guard let boardTile = getTileAt(point: point) else { return false }
+    public func tileDropped(tile: Tile) -> Bool {
+        guard let boardTile = getTileAt(point: tile.position) else { return false }
         boardTile.tile = tile
         return true
     }

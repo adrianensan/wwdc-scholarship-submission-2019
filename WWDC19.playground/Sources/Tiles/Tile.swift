@@ -32,6 +32,7 @@ public class Tile: SKNode {
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         zPosition = ZPosition.topLevelDragging
+        delegate?.tileMoved(to: position)
     }
     
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -42,7 +43,7 @@ public class Tile: SKNode {
     }
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        _ = delegate?.tileDropped(to: position, tile: self)
+        _ = delegate?.tileDropped(tile: self)
     }
     
     public func updateSize() {
@@ -59,5 +60,5 @@ public class Tile: SKNode {
 
 protocol NewTileDelegate: AnyObject {
     func tileMoved(to: CGPoint)
-    func tileDropped(to: CGPoint, tile: Tile) -> Bool
+    func tileDropped(tile: Tile) -> Bool
 }

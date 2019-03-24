@@ -88,6 +88,14 @@ extension CGPoint {
     var distance: CGFloat {
         return sqrt(x * x + y * y)
     }
+    
+    var normalized: CGPoint {
+        return CGPoint(x: x / distance, y: y / distance)
+    }
+    
+    func angle(to point: CGPoint) -> CGFloat {
+        return atan2(point.y - y, point.x - x).normalizedAngle
+    }
 }
 
 extension SKNode {

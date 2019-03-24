@@ -7,6 +7,7 @@ public class Car: BoardObject {
     
     public var carDelegate: CarDelegate?
     
+    private var randomTurnDirection: CGFloat
     private let shape: SKSpriteNode
     private let wheels: [SKSpriteNode]
     private let frontWheels: [SKSpriteNode]
@@ -19,6 +20,7 @@ public class Car: BoardObject {
     }
     
     override init() {
+        randomTurnDirection = CGFloat.random(in: 0...1) < 0.5 ? 1 : -1
         shape = SKSpriteNode()
         wheels = {
             var wheels = [SKSpriteNode]()
@@ -56,16 +58,22 @@ public class Car: BoardObject {
     }
     
     override public func update(delta: CGFloat) {
-        let carFrontPosition = position + (0.8 * Size.carHeight).inDirectionOf(rotation: zRotation + 0.5 * .pi)
-        if let targetPoint = carDelegate?.queryNearestRoadTangent(point: carFrontPosition, direction: zRotation) {
-            var desiredAngle: CGFloat = atan2(targetPoint.y - carFrontPosition.y, targetPoint.x - carFrontPosition.x) - 0.5 * .pi
-            desiredAngle = desiredAngle.normalizedAngle
-            let moveAmount: CGFloat = .shortestAngle(from: zRotation, to: desiredAngle)
-            let turnAmount: CGFloat = min(0.1 * moveAmount, Car.maxTurnSpeedPerSecond)
-            zRotation += turnAmount * delta * 15
-            for wheel in frontWheels { wheel.zRotation = turnAmount * 7.5 }
-        }
         position += Car.maxDriveSpeedPerSecond.inDirectionOf(rotation: zRotation + 0.5 * .pi) * delta * 25
+        
+        let desiredAngle: CGFloat
+        let carFrontPosition = position + (0.7 * Size.carHeight).inDirectionOf(rotation: zRotation + 0.5 * .pi)
+        if let targetPoint = carDelegate?.queryNearestRoadTangent(point: carFrontPosition, direction: zRotation + 0.5 * .pi) {
+            desiredAngle = (carFrontPosition.angle(to: targetPoint) - 0.5 * .pi).normalizedAngle
+        }
+        else {
+            desiredAngle = zRotation + CGFloat.random(in: 0..<0.2) * .pi * randomTurnDirection
+            if CGFloat.random(in: 0..<1) < 0.005 { randomTurnDirection *= -1 }
+        }
+        
+        let moveAmount: CGFloat = .shortestAngle(from: zRotation, to: desiredAngle)
+        let turnAmount: CGFloat = min(0.15 * moveAmount, Car.maxTurnSpeedPerSecond)
+        zRotation += turnAmount * delta * 15
+        for wheel in frontWheels { wheel.zRotation = turnAmount * 7.5 }
     }
 }
 

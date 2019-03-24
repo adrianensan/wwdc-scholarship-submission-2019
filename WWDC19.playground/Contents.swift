@@ -11,5 +11,6 @@ sceneView.showsNodeCount = true
 sceneView.ignoresSiblingOrder = true
 sceneView.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
 sceneView.presentScene(scene)
+sceneView.isMultipleTouchEnabled = true
 
 PlaygroundPage.current.liveView = sceneView

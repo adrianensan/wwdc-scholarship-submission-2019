@@ -22,15 +22,80 @@ public enum TileType: CaseIterable {
         }
     }
     
-    public func closestRoadPoint(point: CGPoint, direction: CGFloat, tileRotation: CGFloat) -> CGPoint? {
+    public func closestRoadPoint(point: CGPoint,
+                                 direction: CGFloat,
+                                 tilePosition: CGPoint,
+                                 tileRotation: CGFloat) -> CGPoint? {
+        var targetPoint = CGPoint()
         switch self {
         case .grass: return nil
-        case .straightRoad: return .zero
-        case .straightWideRoad: return .zero
+        case .straightRoad:
+            targetPoint = straightRoadCheck(lane: 0.5 * (Size.roadLaneWidth + Size.roadDividerWidth),
+                                            point: point,
+                                            direction: direction,
+                                            tilePosition: tilePosition,
+                                            tileRotation: tileRotation)
+        case .straightWideRoad:
+            targetPoint = straightRoadCheck(lane: 1.5 * (Size.roadLaneWidth + Size.roadDividerWidth),
+                                            point: point,
+                                            direction: direction,
+                                            tilePosition: tilePosition,
+                                            tileRotation: tileRotation)
         case .narrowToWideRoad: return .zero
-        case .curvedRoad: return .zero
+        case .curvedRoad:
+            let distFromCenter: CGFloat = 0.5 * (Size.roadLaneWidth + Size.roadDividerWidth)
+            targetPoint = curveRoadCheck(lane: distFromCenter,
+                                         point: point,
+                                         direction: direction,
+                                         tilePosition: tilePosition,
+                                         tileRotation: tileRotation)
         case .curvedWideRoad: return .zero
         }
+        
+        return targetPoint
+    }
+    
+    public func straightRoadCheck(lane: CGFloat,
+                                  point: CGPoint,
+                                  direction: CGFloat,
+                                  tilePosition: CGPoint,
+                                  tileRotation: CGFloat) -> CGPoint {
+        var targetPoint = CGPoint()
+        let isHorizontal = tileRotation.remainder(dividingBy: .pi) == 0
+        let point1 = isHorizontal ? \CGPoint.x : \CGPoint.y
+        let point2 = isHorizontal ? \CGPoint.y : \CGPoint.x
+        targetPoint[keyPath: point1] = point[keyPath: point1]
+        if abs(CGFloat.shortestAngle(from: direction, to: isHorizontal ? 0 : 0.5 * .pi)) < 0.5 * .pi {
+            targetPoint[keyPath: point2] = tilePosition[keyPath: point2] + (isHorizontal ? -lane : lane)
+            targetPoint[keyPath: point1] += 0.5 * Size.carHeight
+        }
+        else {
+            targetPoint[keyPath: point2] = tilePosition[keyPath: point2] + (isHorizontal ? lane : -lane)
+            targetPoint[keyPath: point1] -= 0.5 * Size.carHeight
+        }
+        return targetPoint
+    }
+    
+    public func curveRoadCheck(lane: CGFloat,
+                               point: CGPoint,
+                               direction: CGFloat,
+                               tilePosition: CGPoint,
+                               tileRotation: CGFloat) -> CGPoint {
+        var targetPoint = CGPoint()
+        let roadCurveCenter = CGPoint(x: tilePosition.x + 0.5 * Size.boardTile.width,
+                                      y: tilePosition.y - 0.5 * Size.boardTile.height)
+        var angle = roadCurveCenter.angle(to: point)
+        if abs(CGFloat.shortestAngle(from: direction, to: angle + 0.5 * .pi)) < 0.5 * .pi {
+            angle += 0.05
+            targetPoint.x = roadCurveCenter.x + (0.5 * Size.boardTile.width + lane).inDirectionOf(rotation: angle).x
+            targetPoint.y = roadCurveCenter.y + (0.5 * Size.boardTile.width + lane).inDirectionOf(rotation: angle).y
+        }
+        else {
+            angle -= 0.05
+            targetPoint.x = roadCurveCenter.x + (0.5 * Size.boardTile.width - lane).inDirectionOf(rotation: angle).x
+            targetPoint.y = roadCurveCenter.y + (0.5 * Size.boardTile.width - lane).inDirectionOf(rotation: angle).y
+        }
+        return targetPoint
     }
 }
 

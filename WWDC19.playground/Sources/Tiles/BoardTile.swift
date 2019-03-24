@@ -16,12 +16,12 @@ public class BoardTile: SKNode {
             parent?.addChild(tile)
             tile.run(.move(to: position, duration: Duration.magnetSnapAnimation)) {
                 tile.zPosition = 0
+                self.boardTileDelegate?.tileSelected(tile: tile)
             }
         }
     }
-    private let placeholderTile: PlaceholderTile
-    private let highlightOverlay: SKSpriteNode
     
+    var boardTileDelegate: BoardTileDelegate?
     var delegate: NewTileDelegate?
     
     var editable: Bool {
@@ -38,15 +38,19 @@ public class BoardTile: SKNode {
         set {
             highlightOverlay.run(.fadeAlpha(to: newValue ? 1 : 0,
                                             duration: Duration.magnetSnapAnimation))
-            
         }
     }
+    
+    private let placeholderTile: PlaceholderTile
+    private let highlightOverlay: SKSpriteNode
+    private var selected: Bool
     
     public override init() {
         tile = nil
         placeholderTile = PlaceholderTile()
         highlightOverlay = SKSpriteNode()
         editable = false
+        selected = false
         super.init()
         
         placeholderTile.alpha = 0
@@ -75,8 +79,12 @@ public class BoardTile: SKNode {
     }
     
     public func queryNearestRoadTangent(point: CGPoint, direction: CGFloat) -> CGPoint? {
-        return tile?.type.closestRoadPoint(point: point, direction: direction, tileRotation: tile!.zRotation)
+        return tile?.type.closestRoadPoint(point: point, direction: direction, tilePosition: position, tileRotation: tile!.zRotation)
     }
+}
+
+protocol BoardTileDelegate {
+    func tileSelected(tile: Tile?)
 }
 
 extension BoardTile: NewTileDelegate {
@@ -84,10 +92,11 @@ extension BoardTile: NewTileDelegate {
         tile?.zPosition = ZPosition.overlayTile
         tile = nil
         delegate?.tileMoved(to: point)
+        boardTileDelegate?.tileSelected(tile: nil)
     }
     
-    public func tileDropped(to point: CGPoint, tile: Tile) -> Bool {
-        let successfullyMoved = delegate?.tileDropped(to: point, tile: tile) ?? false
+    public func tileDropped(tile: Tile) -> Bool {
+        let successfullyMoved = delegate?.tileDropped(tile: tile) ?? false
         if !successfullyMoved { tile.removeFromParent() }
         return successfullyMoved
     }

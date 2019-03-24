@@ -62,8 +62,8 @@ extension TileSelector: NewTileDelegate {
         delegate?.tileMoved(to: point)
     }
     
-    public func tileDropped(to point: CGPoint, tile: Tile) -> Bool {
-        let successfullyDropped = delegate?.tileDropped(to: point, tile: tile) ?? false
+    public func tileDropped(tile: Tile) -> Bool {
+        let successfullyDropped = delegate?.tileDropped(tile: tile) ?? false
         if successfullyDropped {
             let index = TileType.allCases.firstIndex(of: tile.type)!
             tiles[index] = tile.type.tile
