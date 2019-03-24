@@ -136,7 +136,6 @@ extension Board: BoardObjectDelegate {
     }
     
     public func objectDropped(object: BoardObject) -> Bool {
-        guard let boardTile = getTileAt(point: object.position), let _ = boardTile.tile else { return false }
         boardObjects.append(object)
         object.move(toParent: self)
         if let object = object as? Car { object.carDelegate = self }
@@ -152,6 +151,7 @@ extension Board: BoardTileDelegate {
 
 extension Board: NewTileDelegate {
     public func tileMoved(to point: CGPoint) {
+        boardTileOptionsPopup.tile = nil
         let tile = getTileAt(point: point)
         if tile == nil || !tile!.highlighted {
             for i in 0..<Board.tileCount {

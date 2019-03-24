@@ -67,7 +67,7 @@ public enum TileType: CaseIterable {
                                   tilePosition: CGPoint,
                                   tileRotation: CGFloat) -> CGPoint {
         var targetPoint = CGPoint()
-        let isHorizontal = tileRotation.remainder(dividingBy: .pi) == 0
+        let isHorizontal = abs(tileRotation.remainder(dividingBy: .pi)) < 0.1 * .pi || abs(tileRotation.remainder(dividingBy: .pi)) > 0.9 * .pi
         let point1 = isHorizontal ? \CGPoint.x : \CGPoint.y
         let point2 = isHorizontal ? \CGPoint.y : \CGPoint.x
         targetPoint[keyPath: point1] = point[keyPath: point1]
