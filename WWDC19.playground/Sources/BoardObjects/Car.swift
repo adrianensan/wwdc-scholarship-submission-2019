@@ -32,6 +32,8 @@ public class Car: BoardObject {
         
         shape.zPosition = ZPosition.car
         shape.anchorPoint.y = 0.2
+        shape.colorBlendFactor = 1
+        shape.color = Color.randomCar
         addChild(shape)
         
         for wheel in wheels {

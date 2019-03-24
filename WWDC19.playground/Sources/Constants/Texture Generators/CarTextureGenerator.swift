@@ -10,7 +10,7 @@ public struct CarTextureGenerator {
         let carNode = SKNode()
         
         let baseCarShape = SKShapeNode()
-        baseCarShape.fillColor = .red
+        baseCarShape.fillColor = .white
         baseCarShape.strokeColor = .black
         baseCarShape.lineWidth = 0.025 * width
         baseCarShape.lineJoin = .round
