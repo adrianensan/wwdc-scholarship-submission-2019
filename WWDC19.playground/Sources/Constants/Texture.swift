@@ -6,6 +6,7 @@ public struct Texture {
     
     static var buttonShape: SKTexture!
     static var tileOptionsPopup: SKTexture!
+    static var rotateIcon: SKTexture!
     
     static var car: SKTexture!
     
@@ -26,6 +27,7 @@ public struct Texture {
         
         buttonShape = ButtonShapeTextureGenerator.generate()
         tileOptionsPopup = TileOptionsPopupTextureGenerator.generate()
+        rotateIcon = RotateIconTextureGenerator.generate()
         
         car = CarTextureGenerator.generate()
         

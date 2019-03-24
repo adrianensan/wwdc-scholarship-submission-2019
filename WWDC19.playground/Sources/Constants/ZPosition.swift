@@ -20,5 +20,8 @@ public struct ZPosition {
     static let buttonBackground: CGFloat = 110
     static let buttonText: CGFloat = 111
     
-    static let topLevelDragging: CGFloat = 200
+    static let topLevelDragging: CGFloat = 120
+    
+    static let titleScreenBackground: CGFloat = 130
+    static let titleScreenElement: CGFloat = 131
 }

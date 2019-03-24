@@ -2,6 +2,7 @@ import SpriteKit
 
 public class Scene: SKScene {
     
+    private let titleScreen: TitleScreen
     private let background: Background
     private let board: Board
     private let sidebar: Sidebar
@@ -15,6 +16,7 @@ public class Scene: SKScene {
     private var lastUpdateTime: TimeInterval
     
     override public init() {
+        titleScreen = TitleScreen()
         background = Background()
         board = Board()
         sidebar = Sidebar()
@@ -29,6 +31,9 @@ public class Scene: SKScene {
         scaleMode = .resizeFill
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         backgroundColor = .black
+        
+        titleScreen.delegate = self
+        addChild(titleScreen)
         
         background.zPosition = ZPosition.background
         addChild(background)
@@ -66,6 +71,7 @@ public class Scene: SKScene {
         
         Size.updateSizing(sceneSize: size)
         
+        titleScreen.updateSize()
         background.updateSize()
         board.updateSize()
         sidebar.updateSize()
@@ -96,6 +102,9 @@ extension Scene: ButtonDelegate {
         switch id {
         case ID.editBoardButton: editingBoard = !editingBoard
         case ID.clearBoardButton: board.clear()
+        case ID.startCreateButton:
+            titleScreen.run(.fadeOut(withDuration: Duration.magnetSnapAnimation))
+            editingBoard = true
         default: return
         }
     }

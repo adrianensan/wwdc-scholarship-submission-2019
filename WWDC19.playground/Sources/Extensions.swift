@@ -4,8 +4,9 @@ extension CGFloat {
     
     static func shortestAngle(from: CGFloat, to: CGFloat) -> CGFloat {
         var difference: CGFloat = to - from
-        if abs(2 * .pi - abs(difference)) < abs(difference) {
-            difference = abs(2 * .pi - abs(difference)) * -1 * difference.direction
+        let alternateAngle: CGFloat = abs(2 * .pi - abs(difference))
+        if alternateAngle < abs(difference) {
+            difference = alternateAngle * -1 * difference.direction
         }
         return difference
     }
@@ -59,7 +60,8 @@ extension CGRect {
     }
     
     func originOffsetFromCenter(offset: CGSize) -> CGPoint {
-        return CGPoint(x: origin.x + 0.5 * (width - offset.width), y: origin.y + 0.5 * (height - offset.height))
+        return CGPoint(x: origin.x + 0.5 * (width - offset.width),
+                       y: origin.y + 0.5 * (height - offset.height))
     }
 }
 

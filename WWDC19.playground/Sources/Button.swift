@@ -4,12 +4,6 @@ public class Button: SKNode {
     
     var delegate: ButtonDelegate?
     
-    var isSelected: Bool {
-        didSet {
-            
-        }
-    }
-    
     var isEnabled: Bool {
         get { return isUserInteractionEnabled }
         set { isUserInteractionEnabled = newValue }
@@ -25,6 +19,11 @@ public class Button: SKNode {
         set { shapeNode.color = newValue }
     }
     
+    private var isSelected: Bool {
+        didSet {
+    
+        }
+    }
     private let id: Int
     private let shapeNode: SKSpriteNode
     private let textNode: SKLabelNode

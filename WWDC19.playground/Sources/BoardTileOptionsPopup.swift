@@ -24,9 +24,13 @@ public class BoardTileOptionsPopup: SKNode {
     }
     
     private let background: SKSpriteNode
+    private let rotateIconLeft: SKSpriteNode
+    private let rotateIconRight: SKSpriteNode
     
     override public init() {
         background = SKSpriteNode()
+        rotateIconLeft = SKSpriteNode()
+        rotateIconRight = SKSpriteNode()
         super.init()
         
         alpha = 0
@@ -35,6 +39,13 @@ public class BoardTileOptionsPopup: SKNode {
         background.color = .black
         background.zPosition = ZPosition.overlay
         addChild(background)
+        
+        rotateIconLeft.zPosition = ZPosition.overlayTile
+        addChild(rotateIconLeft)
+        
+        rotateIconRight.zPosition = ZPosition.overlayTile
+        rotateIconRight.xScale = -1
+        addChild(rotateIconRight)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -66,6 +77,14 @@ public class BoardTileOptionsPopup: SKNode {
     public func updateSize() {
         background.texture = Texture.tileOptionsPopup
         background.size = Texture.tileOptionsPopup.size()
+        
+        rotateIconLeft.texture = Texture.rotateIcon
+        rotateIconLeft.size = Texture.rotateIcon.size()
+        rotateIconLeft.position.x = -0.25 * Size.boardTile.width
+        
+        rotateIconRight.texture = Texture.rotateIcon
+        rotateIconRight.size = Texture.rotateIcon.size()
+        rotateIconRight.position.x = 0.25 * Size.boardTile.width
     }
     
     public func update(_ delta: CGFloat) {

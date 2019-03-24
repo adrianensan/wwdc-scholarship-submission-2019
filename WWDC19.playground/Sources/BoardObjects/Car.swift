@@ -68,7 +68,7 @@ public class Car: BoardObject {
             desiredAngle = (carFrontPosition.angle(to: targetPoint) - 0.5 * .pi).normalizedAngle
         }
         else {
-            desiredAngle = zRotation + CGFloat.random(in: 0..<0.2) * .pi * randomTurnDirection
+            desiredAngle = zRotation + CGFloat.random(in: 0..<0.1) * .pi * randomTurnDirection
             if CGFloat.random(in: 0..<1) < 0.005 { randomTurnDirection *= -1 }
         }
         
