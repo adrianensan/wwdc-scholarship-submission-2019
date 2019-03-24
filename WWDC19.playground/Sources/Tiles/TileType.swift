@@ -21,5 +21,16 @@ public enum TileType: CaseIterable {
             }
         }
     }
+    
+    public func closestRoadPoint(point: CGPoint, direction: CGFloat, tileRotation: CGFloat) -> CGPoint? {
+        switch self {
+        case .grass: return nil
+        case .straightRoad: return .zero
+        case .straightWideRoad: return .zero
+        case .narrowToWideRoad: return .zero
+        case .curvedRoad: return .zero
+        case .curvedWideRoad: return .zero
+        }
+    }
 }
 

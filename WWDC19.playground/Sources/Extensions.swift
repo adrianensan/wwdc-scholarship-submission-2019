@@ -1,7 +1,28 @@
 import SpriteKit
 
-extension SKNode {
+extension CGFloat {
+    
+    static func shortestAngle(from: CGFloat, to: CGFloat) -> CGFloat {
+        var difference: CGFloat = to - from
+        if abs(2 * .pi - abs(difference)) < abs(difference) {
+            difference = abs(2 * .pi - abs(difference)) * -1 * difference.direction
+        }
+        return difference
+    }
 
+    var normalizedAngle: CGFloat {
+        var angle: CGFloat = self.remainder(dividingBy: 2 * .pi)
+        if angle < 0 { angle += 2 * .pi }
+        return angle
+    }
+    
+    var direction: CGFloat {
+        return self >= 0 ? 1 : -1
+    }
+    
+    func inDirectionOf(rotation: CGFloat) -> CGPoint {
+        return CGPoint(x: self * cos(rotation), y: self * sin(rotation))
+    }
 }
 
 extension CGSize {
@@ -43,6 +64,26 @@ extension CGRect {
 }
 
 extension CGPoint {
+    
+    static func +=(left: inout CGPoint, right: CGPoint) {
+        left = left + right
+    }
+    
+    static func +(left: CGPoint, right: CGPoint) -> CGPoint {
+        return CGPoint(x: left.x + right.x, y: left.y + right.y)
+    }
+    
+    static func +(left: CGPoint, right: CGFloat) -> CGPoint {
+        return CGPoint(x: left.x + right, y: left.y + right)
+    }
+    
+    static func -(left: CGPoint, right: CGPoint) -> CGPoint {
+        return CGPoint(x: left.x - right.x, y: left.y - right.y)
+    }
+    
+    static func *(left: CGPoint, right: CGFloat) -> CGPoint {
+        return CGPoint(x: left.x * right, y: left.y * right)
+    }
     
     var distance: CGFloat {
         return sqrt(x * x + y * y)

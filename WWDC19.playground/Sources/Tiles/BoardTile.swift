@@ -73,6 +73,10 @@ public class BoardTile: SKNode {
         placeholderTile.update(delta)
         tile?.update(delta)
     }
+    
+    public func queryNearestRoadTangent(point: CGPoint, direction: CGFloat) -> CGPoint? {
+        return tile?.type.closestRoadPoint(point: point, direction: direction, tileRotation: tile!.zRotation)
+    }
 }
 
 extension BoardTile: NewTileDelegate {

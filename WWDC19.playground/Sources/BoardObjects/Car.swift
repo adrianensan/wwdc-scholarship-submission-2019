@@ -11,6 +11,13 @@ public class Car: BoardObject {
     private let wheels: [SKSpriteNode]
     private let frontWheels: [SKSpriteNode]
     
+    public override var zRotation: CGFloat {
+        didSet {
+            let normalizedAngle = zRotation.normalizedAngle
+            if zRotation != normalizedAngle { zRotation = normalizedAngle }
+        }
+    }
+    
     override init() {
         shape = SKSpriteNode()
         wheels = {
@@ -49,15 +56,19 @@ public class Car: BoardObject {
     }
     
     override public func update(delta: CGFloat) {
-        let target = carDelegate?.queryNearestRoadTangent(point: position, direction: zRotation)
-        let turnAmount: CGFloat = min(0.1 * ((target?.tangent ?? zRotation) - zRotation), Car.maxTurnSpeedPerSecond)
-        zRotation += turnAmount * delta * 15
-        for wheel in frontWheels { wheel.zRotation = turnAmount * 7.5 }
-        position.x -= Car.maxDriveSpeedPerSecond * sin(zRotation) * delta * 25
-        position.y += Car.maxDriveSpeedPerSecond * cos(zRotation) * delta * 25
+        let carFrontPosition = position + (0.8 * Size.carHeight).inDirectionOf(rotation: zRotation + 0.5 * .pi)
+        if let targetPoint = carDelegate?.queryNearestRoadTangent(point: carFrontPosition, direction: zRotation) {
+            var desiredAngle: CGFloat = atan2(targetPoint.y - carFrontPosition.y, targetPoint.x - carFrontPosition.x) - 0.5 * .pi
+            desiredAngle = desiredAngle.normalizedAngle
+            let moveAmount: CGFloat = .shortestAngle(from: zRotation, to: desiredAngle)
+            let turnAmount: CGFloat = min(0.1 * moveAmount, Car.maxTurnSpeedPerSecond)
+            zRotation += turnAmount * delta * 15
+            for wheel in frontWheels { wheel.zRotation = turnAmount * 7.5 }
+        }
+        position += Car.maxDriveSpeedPerSecond.inDirectionOf(rotation: zRotation + 0.5 * .pi) * delta * 25
     }
 }
 
 public protocol CarDelegate {
-    func queryNearestRoadTangent(point: CGPoint, direction: CGFloat) -> (point: CGPoint, tangent: CGFloat)
+    func queryNearestRoadTangent(point: CGPoint, direction: CGFloat) -> CGPoint?
 }

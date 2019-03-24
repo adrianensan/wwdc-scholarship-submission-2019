@@ -133,6 +133,7 @@ extension Board: BoardObjectDelegate {
         guard let boardTile = getTileAt(point: object.position), let _ = boardTile.tile else { return false }
         boardObjects.append(object)
         object.move(toParent: self)
+        if let object = object as? Car { object.carDelegate = self }
         return true
     }
 }
@@ -159,8 +160,7 @@ extension Board: NewTileDelegate {
 }
 
 extension Board: CarDelegate {
-    public func queryNearestRoadTangent(point: CGPoint, direction: CGFloat) -> (point: CGPoint, tangent: CGFloat) {
-        let boardTile = getTileAt(point: point)
-        return (point: CGPoint(x: -100, y: -100), tangent: 0.5 * .pi)
+    public func queryNearestRoadTangent(point: CGPoint, direction: CGFloat) -> CGPoint? {
+        return getTileAt(point: point)?.queryNearestRoadTangent(point: point, direction: direction)
     }
 }
