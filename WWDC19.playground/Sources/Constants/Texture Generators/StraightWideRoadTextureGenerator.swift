@@ -38,30 +38,29 @@ public struct StraightWideRoadTextureGenerator {
         
         // Solid Line
         let roadDividerSegmentNode = BaseShapeNodes.roadDivider
-        roadDividerSegmentNode.fillColor = .clear
-        roadDividerSegmentNode.strokeColor = Color.roadDivider
-        roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
         roadDividerSegmentNode.path = {
             let path = CGMutablePath()
             path.addLines(between: [
-                CGPoint(x: -0.5 * roadSize.width, y: -0.5 * Size.roadDividerWidth),
-                CGPoint(x: 0.5 * roadSize.width, y: -0.5 * Size.roadDividerWidth)
+                CGPoint(x: -0.5 * roadSize.width, y: 0),
+                CGPoint(x: 0.5 * roadSize.width, y: 0)
             ])
             path.closeSubpath()
             return path
         }()
         node.addChild(roadDividerSegmentNode)
         
+        let segmentsStartPositionX: CGFloat = -0.5 * (roadSize.width - segmentsSpacing + segmentLength)
         for i in 0..<2 {
             for j in 0..<segments {
                 let roadDividerSegmentNode = BaseShapeNodes.roadDivider
                 roadDividerSegmentNode.path = {
                     let path = CGMutablePath()
-                    path.addRoundedRect(in: CGRect(origin: CGPoint(x: -0.5 * (roadSize.width - segmentsSpacing + segmentLength) + CGFloat(j) * segmentsSpacing,
-                                                                   y: -Size.roadLaneWidth - 1.5 *  Size.roadDividerWidth + CGFloat(i) * 2 * (Size.roadLaneWidth + Size.roadDividerWidth)),
-                                                   size: CGSize(width: segmentLength, height: Size.roadDividerWidth)),
-                                        cornerWidth: 0.5 * Size.roadDividerWidth,
-                                        cornerHeight: 0.5 * Size.roadDividerWidth)
+                    path.addLines(between: [
+                        CGPoint(x: segmentsStartPositionX + CGFloat(j) * segmentsSpacing,
+                                y: -Size.roadLaneWidth - 1 *  Size.roadDividerWidth + CGFloat(i) * 2 * (Size.roadLaneWidth + Size.roadDividerWidth)),
+                        CGPoint(x: segmentsStartPositionX + CGFloat(j) * segmentsSpacing + segmentLength,
+                                y: -Size.roadLaneWidth - 1 *  Size.roadDividerWidth + CGFloat(i) * 2 * (Size.roadLaneWidth + Size.roadDividerWidth))
+                    ])
                     path.closeSubpath()
                     return path
                 }()

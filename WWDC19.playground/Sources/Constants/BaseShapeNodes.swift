@@ -21,8 +21,9 @@ public struct BaseShapeNodes {
     
     static var roadDivider: SKShapeNode {
         let node = SKShapeNode()
-        node.fillColor = Color.roadDivider
-        node.lineWidth = 0
+        node.fillColor = .clear
+        node.strokeColor = Color.roadDivider
+        node.lineWidth = Size.roadDividerWidth
         node.zPosition = 2
         return node
     }

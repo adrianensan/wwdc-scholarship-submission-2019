@@ -38,9 +38,6 @@ public struct StraightRoadTextureGenerator {
         let segmentLength: CGFloat = 0.6 * segmentsSpacing
         for i in 0..<segments {
             let roadDividerSegmentNode = BaseShapeNodes.roadDivider
-            roadDividerSegmentNode.fillColor = .clear
-            roadDividerSegmentNode.strokeColor = Color.roadDivider
-            roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
             roadDividerSegmentNode.path = {
                 let path = CGMutablePath()
                 path.addLines(between: [

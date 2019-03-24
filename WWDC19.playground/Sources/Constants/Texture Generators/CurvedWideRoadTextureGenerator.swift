@@ -49,14 +49,11 @@ public struct CurvedWideRoadTextureGenerator {
         node.addChild(roadNodeOutline)
         
         let roadDividerSegmentNode = BaseShapeNodes.roadDivider
-        roadDividerSegmentNode.fillColor = .clear
-        roadDividerSegmentNode.strokeColor = Color.roadDivider
-        roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
         roadDividerSegmentNode.path = {
             let path = CGMutablePath()
             path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
                                         y: -0.5 * Size.boardTile.height),
-                        radius: 0.5 * (Size.boardTile.width - Size.roadDividerWidth),
+                        radius: 0.5 * Size.boardTile.width,
                         startAngle: 0.5 * .pi,
                         endAngle: .pi,
                         clockwise: false)
@@ -70,10 +67,6 @@ public struct CurvedWideRoadTextureGenerator {
         let segmentOuterLength: CGFloat = 0.6 * segmentsOuterSpacing
         for i in 0..<segmentsOuter {
             let roadDividerSegmentNode = BaseShapeNodes.roadDivider
-            roadDividerSegmentNode.fillColor = .clear
-            roadDividerSegmentNode.strokeColor = Color.roadDivider
-            roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
-            roadDividerSegmentNode.lineCap = .round
             roadDividerSegmentNode.path = {
                 let path = CGMutablePath()
                 path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
@@ -93,10 +86,6 @@ public struct CurvedWideRoadTextureGenerator {
         let segmentInnerLength: CGFloat = 0.6 * segmentsInnerSpacing
         for i in 0..<segmentsInner {
             let roadDividerSegmentNode = BaseShapeNodes.roadDivider
-            roadDividerSegmentNode.fillColor = .clear
-            roadDividerSegmentNode.strokeColor = Color.roadDivider
-            roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
-            roadDividerSegmentNode.lineCap = .round
             roadDividerSegmentNode.path = {
                 let path = CGMutablePath()
                 path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,

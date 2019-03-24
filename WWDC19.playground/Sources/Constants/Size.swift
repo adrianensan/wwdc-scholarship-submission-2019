@@ -38,8 +38,8 @@ public struct Size {
         boardTile = board / CGFloat(Board.tileCount)
         
         roadLaneWidth = 0.2 * boardTile.height
-        roadDividerWidth = 0.02 * boardTile.height
-        roadOutlineWidth = 2
+        roadDividerWidth = 0.025 * boardTile.height
+        roadOutlineWidth = 0.01 * boardTile.height
         
         titleFontSize = 3 * unit
         subTitleFontSize = 2 * unit

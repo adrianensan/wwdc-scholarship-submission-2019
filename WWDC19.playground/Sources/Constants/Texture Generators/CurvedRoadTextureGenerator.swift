@@ -53,14 +53,11 @@ public struct CurvedRoadTextureGenerator {
         let segmentLength: CGFloat = 0.6 * segmentsSpacing
         for i in 0..<segments {
             let roadDividerSegmentNode = BaseShapeNodes.roadDivider
-            roadDividerSegmentNode.fillColor = .clear
-            roadDividerSegmentNode.lineWidth = Size.roadDividerWidth
-            roadDividerSegmentNode.strokeColor = Color.roadDivider
             roadDividerSegmentNode.path = {
                 let path = CGMutablePath()
                 path.addArc(center: CGPoint(x: 0.5 * Size.boardTile.width,
                                             y: -0.5 * Size.boardTile.height),
-                            radius: 0.5 * (Size.boardTile.width - Size.roadDividerWidth),
+                            radius: 0.5 * Size.boardTile.width,
                             startAngle: 0.5 * (.pi + (segmentsSpacing - segmentLength)) + CGFloat(i) * segmentsSpacing,
                             endAngle: 0.5 * (.pi + (segmentsSpacing - segmentLength)) + CGFloat(i) * segmentsSpacing + segmentLength,
                             clockwise: false)

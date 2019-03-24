@@ -54,11 +54,10 @@ public struct NarrowToWideRoadTextureGenerator {
         let roadDividerSegmentNode = BaseShapeNodes.roadDivider
         roadDividerSegmentNode.path = {
             let path = CGMutablePath()
-            path.addRoundedRect(in: CGRect(origin: CGPoint(x: -0.5 * (roadSize.width - segmentsSpacing + segmentLength) + 3 * segmentsSpacing,
-                                                           y: -0.5 * Size.roadDividerWidth),
-                                           size: CGSize(width: segmentLength, height: Size.roadDividerWidth)),
-                                cornerWidth: 0.5 * Size.roadDividerWidth,
-                                cornerHeight: 0.5 * Size.roadDividerWidth)
+            path.addLines(between: [
+                CGPoint(x: -0.5 * (roadSize.width - segmentsSpacing + segmentLength) + 3 * segmentsSpacing, y: 0),
+                CGPoint(x: -0.5 * (roadSize.width - segmentsSpacing + segmentLength) + 3 * segmentsSpacing + segmentLength, y: 0)
+            ])
             path.closeSubpath()
             return path
         }()
@@ -68,26 +67,26 @@ public struct NarrowToWideRoadTextureGenerator {
         let roadSolidDividerSegmentNode = BaseShapeNodes.roadDivider
         roadSolidDividerSegmentNode.path = {
             let path = CGMutablePath()
-            path.addRoundedRect(in: CGRect(origin: CGPoint(x: -0.5 * roadSize.width,
-                                                           y: -0.5 * Size.roadDividerWidth),
-                                           size: CGSize(width: roadSize.width - segmentsSpacing - 0.5 * (segmentsSpacing - segmentLength), height: Size.roadDividerWidth)),
-                                cornerWidth: 0.25 * Size.roadDividerWidth,
-                                cornerHeight: 0.25 * Size.roadDividerWidth)
+            path.addLines(between: [
+                CGPoint(x: -0.5 * roadSize.width, y: 0),
+                CGPoint(x: -0.5 * roadSize.width + roadSize.width - segmentsSpacing - 0.5 * (segmentsSpacing - segmentLength), y: 0)
+            ])
             path.closeSubpath()
             return path
         }()
         node.addChild(roadSolidDividerSegmentNode)
         
+        let positionStartX: CGFloat = -0.5 * (roadSize.width - segmentsSpacing + segmentLength)
         for i in 0..<2 {
+            let positionY: CGFloat = -Size.roadLaneWidth - 1 *  Size.roadDividerWidth + CGFloat(i) * 2 * (Size.roadLaneWidth + Size.roadDividerWidth)
             for j in 0..<1 {
                 let roadDividerSegmentNode = BaseShapeNodes.roadDivider
                 roadDividerSegmentNode.path = {
                     let path = CGMutablePath()
-                    path.addRoundedRect(in: CGRect(origin: CGPoint(x: -0.5 * (roadSize.width - segmentsSpacing + segmentLength) + CGFloat(j) * segmentsSpacing,
-                                                                   y: -Size.roadLaneWidth - 1.5 *  Size.roadDividerWidth + CGFloat(i) * 2 * (Size.roadLaneWidth + Size.roadDividerWidth)),
-                                                   size: CGSize(width: segmentLength, height: Size.roadDividerWidth)),
-                                        cornerWidth: 0.5 * Size.roadDividerWidth,
-                                        cornerHeight: 0.5 * Size.roadDividerWidth)
+                    path.addLines(between: [
+                        CGPoint(x: positionStartX + CGFloat(j) * segmentsSpacing, y: positionY),
+                        CGPoint(x: positionStartX + segmentLength, y: positionY)
+                        ])
                     path.closeSubpath()
                     return path
                 }()
