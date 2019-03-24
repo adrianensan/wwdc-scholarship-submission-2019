@@ -4,13 +4,12 @@ import PlaygroundSupport
 import SpriteKit
 
 let scene = Scene()
-let sceneView = SKView(frame: CGRect(origin: .zero, size: CGSize(width: 700, height: 540)))
+let sceneView = SKView(frame: CGRect(origin: .zero, size: CGSize(width: 700, height: 600)))
 sceneView.showsDrawCount = true
 sceneView.showsFPS = true
 sceneView.showsNodeCount = true
 sceneView.ignoresSiblingOrder = true
 sceneView.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
 sceneView.presentScene(scene)
-sceneView.isMultipleTouchEnabled = true
 
 PlaygroundPage.current.liveView = sceneView

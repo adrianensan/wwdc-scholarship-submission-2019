@@ -3,6 +3,11 @@ import SpriteKit
 public struct Size {
 
     static var sceneSize: CGSize = .zero
+    static var longScreenDimension: WritableKeyPath<CGSize, CGFloat> = \CGSize.width
+    static var shortScreenDimension: WritableKeyPath<CGSize, CGFloat> = \CGSize.height
+    static var longScreenAxis: WritableKeyPath<CGPoint, CGFloat> = \CGPoint.x
+    static var shortScreenAxis: WritableKeyPath<CGPoint, CGFloat> = \CGPoint.y
+    
     static var sceneObjectRadius: CGFloat = 0
     
     static var backgroundWoodBlock: CGSize = .zero
@@ -27,6 +32,10 @@ public struct Size {
         let unit: CGFloat = 0.01 * min(sceneSize.width, sceneSize.height)
         
         Size.sceneSize = sceneSize
+        longScreenDimension = sceneSize.width > sceneSize.height ? \CGSize.width : \CGSize.height
+        shortScreenDimension = sceneSize.width > sceneSize.height ? \CGSize.height : \CGSize.width
+        longScreenAxis = sceneSize.width > sceneSize.height ? \CGPoint.x : \CGPoint.y
+        shortScreenAxis = sceneSize.width > sceneSize.height ? \CGPoint.y : \CGPoint.x
         
         sceneObjectRadius = 0.75 * sceneSize.diagonal
         
@@ -41,8 +50,8 @@ public struct Size {
         roadDividerWidth = 0.025 * boardTile.height
         roadOutlineWidth = 0.01 * boardTile.height
         
-        titleFontSize = 3 * unit
-        subTitleFontSize = 2 * unit
+        titleFontSize = 7 * unit
+        subTitleFontSize = 4 * unit
         secondaryFontSize = 1.8 * unit
         
         sidebarWidth = 2.75 * Size.boardTile.width
