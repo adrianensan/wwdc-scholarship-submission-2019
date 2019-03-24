@@ -6,8 +6,8 @@ public enum TileType: CaseIterable {
     case straightRoad
     case straightWideRoad
     case narrowToWideRoad
-    case curvedWideRoad
     case curvedRoad
+    case curvedWideRoad
     
     public var tile: Tile {
         get {
@@ -41,7 +41,12 @@ public enum TileType: CaseIterable {
                                             direction: direction,
                                             tilePosition: tilePosition,
                                             tileRotation: tileRotation)
-        case .narrowToWideRoad: return .zero
+        case .narrowToWideRoad:
+            targetPoint = straightRoadCheck(lane: 0.5 * (Size.roadLaneWidth + Size.roadDividerWidth),
+                                            point: point,
+                                            direction: direction,
+                                            tilePosition: tilePosition,
+                                            tileRotation: tileRotation)
         case .curvedRoad:
             let distFromCenter: CGFloat = 0.5 * (Size.roadLaneWidth + Size.roadDividerWidth)
             targetPoint = curveRoadCheck(lane: distFromCenter,

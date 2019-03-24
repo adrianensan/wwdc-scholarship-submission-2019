@@ -113,6 +113,76 @@ public class Board: SKNode {
         }
     }
     
+    public func setupDemo() {
+        tiles[0][0].tile = CurvedRoadTile()
+        tiles[0][0].tile?.zRotation = 0.5 * .pi
+        
+        tiles[1][0].tile = StraightRoadTile()
+        
+        tiles[2][0].tile = StraightRoadTile()
+        
+        tiles[3][0].tile = CurvedRoadTile()
+        tiles[3][0].tile?.zRotation = .pi
+        
+        tiles[4][0].tile = CurvedRoadTile()
+        tiles[4][0].tile?.zRotation = 0.5 * .pi
+        
+        
+        tiles[0][1].tile = CurvedRoadTile()
+        
+        tiles[1][1].tile = StraightRoadTile()
+        
+        tiles[2][1].tile = CurvedRoadTile()
+        tiles[2][1].tile?.zRotation = .pi
+        
+        tiles[3][1].tile = CurvedRoadTile()
+        
+        tiles[4][1].tile = CurvedRoadTile()
+        tiles[4][1].tile?.zRotation = 1.5 * .pi
+        
+        
+        tiles[0][2].tile = CurvedWideRoadTile()
+        tiles[0][2].tile?.zRotation = 0.5 * .pi
+        
+        tiles[1][2].tile = CurvedWideRoadTile()
+        tiles[1][2].tile?.zRotation = .pi
+        
+        tiles[2][2].tile = NarrowToWideRoadTile()
+        tiles[2][2].tile?.zRotation = 1.5 * .pi
+        
+        tiles[3][2].tile = CurvedRoadTile()
+        tiles[3][2].tile?.zRotation = 0.5 * .pi
+        
+        tiles[4][2].tile = StraightRoadTile()
+        
+        
+        tiles[0][3].tile = StraightWideRoadTile()
+        tiles[0][3].tile?.zRotation = 0.5 * .pi
+        
+        tiles[1][3].tile = CurvedWideRoadTile()
+        
+        tiles[2][3].tile = CurvedWideRoadTile()
+        tiles[2][3].tile?.zRotation = 1.5 * .pi
+        
+        tiles[3][3].tile = CurvedRoadTile()
+        
+        tiles[4][3].tile = CurvedRoadTile()
+        tiles[4][3].tile?.zRotation = .pi
+        
+        tiles[0][4].tile = CurvedWideRoadTile()
+        
+        tiles[1][4].tile = StraightWideRoadTile()
+        
+        tiles[2][4].tile = NarrowToWideRoadTile()
+        
+        tiles[3][4].tile = StraightRoadTile()
+        
+        tiles[4][4].tile = CurvedRoadTile()
+        tiles[4][4].tile?.zRotation = 1.5 * .pi
+        
+        updateSize()
+    }
+    
     private func getTileAt(point: CGPoint) -> BoardTile? {
         for node in nodes(at: point) {
             if let node = node as? BoardTile { return node }
@@ -145,6 +215,7 @@ extension Board: BoardObjectDelegate {
 
 extension Board: BoardTileDelegate {
     func tileSelected(tile: Tile?) {
+        guard editable else { return }
         boardTileOptionsPopup.tile = tile
     }
 }

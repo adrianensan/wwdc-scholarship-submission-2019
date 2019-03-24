@@ -50,22 +50,6 @@ public class Scene: SKScene {
         fatalError("Class \"Scene\" is only intended to be instantiated through code")
     }
     
-    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { touchDown(atPoint: t.location(in: self)) }
-    }
-    
-    override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { touchMoved(toPoint: t.location(in: self)) }
-    }
-    
-    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    override public func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { touchUp(atPoint: t.location(in: self)) }
-    }
-    
     public override func didChangeSize(_ oldSize: CGSize) {
         guard size != .zero && size != oldSize else { return }
         
@@ -83,18 +67,6 @@ public class Scene: SKScene {
         guard abs(delta) < 1 else { return }
         board.update(delta)
     }
-    
-    func touchDown(atPoint pos: CGPoint) {
-        
-    }
-    
-    func touchMoved(toPoint pos: CGPoint) {
-        
-    }
-    
-    func touchUp(atPoint pos: CGPoint) {
-        
-    }
 }
 
 extension Scene: ButtonDelegate {
@@ -105,6 +77,9 @@ extension Scene: ButtonDelegate {
         case ID.startCreateButton:
             titleScreen.run(.fadeOut(withDuration: Duration.magnetSnapAnimation))
             editingBoard = true
+        case ID.startDemoButton:
+            titleScreen.run(.fadeOut(withDuration: Duration.magnetSnapAnimation))
+            board.setupDemo()
         default: return
         }
     }
