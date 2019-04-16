@@ -1,1 +1,1 @@
-# wwdc-scholarship-submission-2019
+# WWDC19 Winning Scholarship Submission
